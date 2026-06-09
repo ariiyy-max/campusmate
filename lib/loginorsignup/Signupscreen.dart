@@ -1,8 +1,11 @@
+import 'package:campusmate/loginorsignup/Emailscreen.dart';
 import 'package:flutter/material.dart';
 import 'Registerscreen.dart';
+import 'Phonescreen.dart';
+import 'Emailscreen.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class Signupscreen extends StatelessWidget {
+  const Signupscreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,12 @@ class LoginScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF0D0614), Color(0xFF3B145A)], // Gradient from UI
+              stops: [0.35,0.73],
+              colors: [
+              Color(0x330404C4), // #0404C4
+              Color(0x44EF05F3), // #EF05F3
+            // first colors: [Color(0xFF0D0614), Color(0xFF3B145A)], // Gradient from UI
+          ],
           ),
         ),
         child: SingleChildScrollView(
@@ -22,9 +30,8 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 20),
-              // Logo Placeholder (Replace with your actual asset)
-              const Icon(Icons.blur_circular, size: 60, color: Color(0xFF00D2FF)),
+              const SizedBox(height: 8),
+              Image.asset('images/logocampusmate.png', width: 100, height: 100, fit: BoxFit.contain,),
               const SizedBox(height: 10),
               const Text(
                 'CampusMate',
@@ -35,7 +42,7 @@ class LoginScreen extends StatelessWidget {
                 "Let's Find Your Perfect Match",
                 style: TextStyle(fontSize: 14, color: Colors.white70),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 30),
 
               // Username Field
               _buildLabel('Username'),
@@ -50,7 +57,7 @@ class LoginScreen extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.pushNamed(context, '//forgetscreen'),
                   child: const Text('Forgot Password?', style: TextStyle(color: Colors.grey, fontSize: 12)),
                 ),
               ),
@@ -70,20 +77,37 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Social Buttons
-              _buildSocialButton(
-                  icon: Icons.phone,
-                  text: 'Login with Phone',
-                  color: const Color(0xFF1E272C),
-                  iconColor: Colors.white
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const Phonescreen()));
+                    // Tindakan bila tekan Skip
+                  },
+                    icon: const Icon(Icons.phone_android, color: Colors.white),
+                    label: const Text('Login with Phone'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2D245C),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    ),
+                ),
               ),
               const SizedBox(height: 12),
-              _buildSocialButton(
-                  icon: Icons.g_mobiledata,
-                  text: 'Login with Google',
-                  color: Colors.white,
-                  textColor: Colors.black,
-                  iconColor: Colors.red,
-                  isGoogle: true
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const EmailScreen()));
+                  },
+                  icon: const Icon(Icons.g_mobiledata, color: Colors.white),
+                  label: const Text('Login with Google'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2D245C),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
               ),
               const SizedBox(height: 25),
 

@@ -1,6 +1,6 @@
-import 'package:campusmate/Registerscreen.dart';
+import 'package:campusmate/loginorsignup/Registerscreen.dart';
 import 'package:flutter/material.dart';
-import 'Loginscreen.dart';
+import 'loginorsignup/Signupscreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
 
       routes: {
-        '/login': (context) => const LoginScreen(),
+        '/login': (context) => const Signupscreen(),
         '/register': (context) => const Registerscreen(),
       },
     );
@@ -85,6 +85,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               right: 20,
               child: TextButton(
                 onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const Signupscreen()));
                   // Tindakan bila tekan Skip
                 },
                 child: const Text(
@@ -176,6 +177,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               _currentPage++; // ✅ change page directly, NO PageView control
                             });
                           } else {
+
                             // navigate to main screen here
                           }
                         },

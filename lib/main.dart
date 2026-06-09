@@ -1,4 +1,6 @@
+import 'package:campusmate/Registerscreen.dart';
 import 'package:flutter/material.dart';
+import 'Loginscreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +21,11 @@ class MyApp extends StatelessWidget {
       ),
       home: const OnboardingScreen(),
       debugShowCheckedModeBanner: false,
+
+      routes: {
+        '/login': (context) => const LoginScreen(),
+        '/register': (context) => const Registerscreen(),
+      },
     );
   }
 }

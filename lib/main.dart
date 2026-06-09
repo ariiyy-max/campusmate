@@ -31,7 +31,6 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentPage = 0;
-  final PageController _pageController = PageController();
 
   // Senarai kandungan setiap halaman
   final List<Map<String, dynamic>> _pages = [

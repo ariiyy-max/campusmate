@@ -1,7 +1,5 @@
-import 'package:campusmate/compatibility_quiz.dart';
-import 'package:campusmate/homescreen.dart' hide MyApp;
 import 'package:flutter/material.dart';
-import 'Signupscreen.dart';
+import 'package:campusmate/personal_setup.dart';
 
 class Registerscreen extends StatefulWidget {
   const Registerscreen({super.key});
@@ -183,7 +181,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                   onPressed: _isFormValid? () {
                     print("Register clicked!");
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => const MyApp()),
+                        builder: (context) => const PersonalSetup()),
                     );
                   }
                   : null,

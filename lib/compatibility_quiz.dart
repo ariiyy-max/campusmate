@@ -5,10 +5,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart'as path;
 
-void main() {
-  runApp(const MyApp());
-}
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -2189,7 +2185,7 @@ class _RoommateBorrowScreenState extends State<RoommateBorrowScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.97,
+                      width: MediaQuery.of(context).size.width * 0.658,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -2329,7 +2325,7 @@ class _StudyVibeScreenState extends State<StudyVibeScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 1.0,
+                      width: MediaQuery.of(context).size.width * 0.705,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -2487,7 +2483,7 @@ class _TimeInRoomScreenState extends State<TimeInRoomScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 1.0,
+                      width: MediaQuery.of(context).size.width * 0.752,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -2725,7 +2721,7 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 1.0,
+                      width: MediaQuery.of(context).size.width * 0.799,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),

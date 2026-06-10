@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'Registerscreen.dart';
 import 'Phonescreen.dart';
 import 'Emailscreen.dart';
+import 'package:campusmate/homescreen.dart';
 
 class Signupscreen extends StatelessWidget {
   const Signupscreen({super.key});
@@ -135,7 +136,11 @@ class Signupscreen extends StatelessWidget {
                     backgroundColor: const Color(0xFF6B42C6),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen(),
+                    ),
+                    );
+                  },
                   child: const Text('Login', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                 ),
               ),

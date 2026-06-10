@@ -1,6 +1,7 @@
 import 'package:campusmate/loginorsignup/Registerscreen.dart';
 import 'package:flutter/material.dart';
 import 'loginorsignup/Signupscreen.dart';
+import 'homescreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const Signupscreen(),
         '/register': (context) => const Registerscreen(),
+        '/home' : (context) => const HomeScreen(),
       },
     );
   }
@@ -177,7 +179,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               _currentPage++; // ✅ change page directly, NO PageView control
                             });
                           } else {
-
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Signupscreen()));
                             // navigate to main screen here
                           }
                         },

@@ -1,3 +1,4 @@
+import 'package:campusmate/drawer.dart';
 import 'package:flutter/material.dart';
 import 'loginorsignup/Signupscreen.dart';
 
@@ -27,6 +28,7 @@ class UserProfile {
   final int age;
   final String major;
   final String assetPath;
+
   UserProfile({
     required this.name,
     required this.age,
@@ -62,15 +64,60 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Original complete list of profiles
   final List<UserProfile> _allProfiles = [
-    UserProfile(name: "Mia", age: 27, major: "Information Technology", assetPath: "assets/avatar1.png"),
-    UserProfile(name: "Lexa", age: 19, major: "Information Technology", assetPath: "assets/avatar2.png"),
-    UserProfile(name: "Silvia", age: 19, major: "Business", assetPath: "assets/avatar3.png"),
-    UserProfile(name: "Alice", age: 20, major: "Multimedia", assetPath: "assets/avatar4.png"),
-    UserProfile(name: "Sarah", age: 22, major: "Counseling", assetPath: "assets/avatar1.png"),
-    UserProfile(name: "Nina", age: 24, major: "Accountant", assetPath: "assets/avatar2.png"),
-    UserProfile(name: "Dina", age: 21, major: "Landscape", assetPath: "assets/avatar3.png"),
-    UserProfile(name: "Fathia", age: 19, major: "Pendidikan Islam", assetPath: "assets/avatar4.png"),
-    UserProfile(name: "Zahra", age: 23, major: "Syariah", assetPath: "assets/avatar1.png"),
+    UserProfile(
+      name: "Mia",
+      age: 27,
+      major: "Information Technology",
+      assetPath: "assets/avatar1.png",
+    ),
+    UserProfile(
+      name: "Lexa",
+      age: 19,
+      major: "Information Technology",
+      assetPath: "assets/avatar2.png",
+    ),
+    UserProfile(
+      name: "Silvia",
+      age: 19,
+      major: "Business",
+      assetPath: "assets/avatar3.png",
+    ),
+    UserProfile(
+      name: "Alice",
+      age: 20,
+      major: "Multimedia",
+      assetPath: "assets/avatar4.png",
+    ),
+    UserProfile(
+      name: "Sarah",
+      age: 22,
+      major: "Counseling",
+      assetPath: "assets/avatar1.png",
+    ),
+    UserProfile(
+      name: "Nina",
+      age: 24,
+      major: "Accountant",
+      assetPath: "assets/avatar2.png",
+    ),
+    UserProfile(
+      name: "Dina",
+      age: 21,
+      major: "Landscape",
+      assetPath: "assets/avatar3.png",
+    ),
+    UserProfile(
+      name: "Fathia",
+      age: 19,
+      major: "Pendidikan Islam",
+      assetPath: "assets/avatar4.png",
+    ),
+    UserProfile(
+      name: "Zahra",
+      age: 23,
+      major: "Syariah",
+      assetPath: "assets/avatar1.png",
+    ),
   ];
 
   List<UserProfile> activeProfiles = [];
@@ -82,14 +129,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Apply search filter
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((profile) =>
-          profile.name.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+      filtered = filtered
+          .where(
+            (profile) =>
+                profile.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+          )
+          .toList();
     }
 
     // Apply course filter
     if (_currentFilter.course != null && _currentFilter.course!.isNotEmpty) {
-      filtered = filtered.where((profile) =>
-      profile.major == _currentFilter.course).toList();
+      filtered = filtered
+          .where((profile) => profile.major == _currentFilter.course)
+          .toList();
     }
 
     // Apply age filter
@@ -109,13 +161,18 @@ class _HomeScreenState extends State<HomeScreen> {
     List<UserProfile> filtered = List.from(historyProfiles);
 
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((profile) =>
-          profile.name.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+      filtered = filtered
+          .where(
+            (profile) =>
+                profile.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+          )
+          .toList();
     }
 
     if (_currentFilter.course != null && _currentFilter.course!.isNotEmpty) {
-      filtered = filtered.where((profile) =>
-      profile.major == _currentFilter.course).toList();
+      filtered = filtered
+          .where((profile) => profile.major == _currentFilter.course)
+          .toList();
     }
 
     if (_currentFilter.ageRange != null) {
@@ -181,6 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF0F0C31),
+      drawer: const DrawerScreen(),
       appBar: AppBar(
         backgroundColor: const Color(0xFF0F0C31),
         elevation: 0,
@@ -192,10 +250,17 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-        title: const Text("CampusMate", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "CampusMate",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         // Removed the actions parameter to remove the profile icon
       ),
-      drawer: const AppDrawer(),
+
       body: SafeArea(
         child: Column(
           children: [
@@ -204,6 +269,38 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: Row(
                 children: [
+                  Builder(
+                    builder: (innerContext) => IconButton(
+                      onPressed: () {
+                        Scaffold.of(innerContext).openDrawer();
+                      },
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                        size: 28,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Column(crossAxisAlignment: CrossAxisAlignment.start),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "CampusMate",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "Hello, Maya",
+                        style: TextStyle(color: Colors.white60, fontSize: 14),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Container(
                       height: 45,
@@ -230,9 +327,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       final result = await Navigator.push<FilterOptions>(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => FilterScreen(
-                            currentFilter: _currentFilter,
-                          ),
+                          builder: (context) =>
+                              FilterScreen(currentFilter: _currentFilter),
                         ),
                       );
                       if (result != null) {
@@ -269,24 +365,41 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () => setState(() => isFindMatchSelected = true),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: isFindMatchSelected ? const Color(0xFF8A4FFF) : Colors.transparent,
+                            color: isFindMatchSelected
+                                ? const Color(0xFF8A4FFF)
+                                : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           alignment: Alignment.center,
-                          child: const Text("Find Match", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          child: const Text(
+                            "Find Match",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => setState(() => isFindMatchSelected = false),
+                        onTap: () =>
+                            setState(() => isFindMatchSelected = false),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: !isFindMatchSelected ? const Color(0xFF8A4FFF) : Colors.transparent,
+                            color: !isFindMatchSelected
+                                ? const Color(0xFF8A4FFF)
+                                : Colors.transparent,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           alignment: Alignment.center,
-                          child: const Text("History", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          child: const Text(
+                            "History",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -298,81 +411,111 @@ class _HomeScreenState extends State<HomeScreen> {
             // Roommate Profiles List
             Expanded(
               child: currentList.isEmpty
-                  ? const Center(child: Text("No profiles found", style: TextStyle(color: Colors.white38)))
+                  ? const Center(
+                      child: Text(
+                        "No profiles found",
+                        style: TextStyle(color: Colors.white38),
+                      ),
+                    )
                   : ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: currentList.length,
-                itemBuilder: (context, index) {
-                  final user = currentList[index];
-                  return Container(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    height: 220,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF161439),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          right: 10,
-                          bottom: 0,
-                          top: 10,
-                          child: Opacity(
-                            opacity: 0.8,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                user.assetPath,
-                                fit: BoxFit.contain,
-                                width: 140,
-                                errorBuilder: (c, e, s) {
-                                  return const Icon(Icons.account_circle, size: 100, color: Colors.white24);
-                                },
-                              ),
-                            ),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      itemCount: currentList.length,
+                      itemBuilder: (context, index) {
+                        final user = currentList[index];
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          height: 220,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF161439),
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        ),
-                        Positioned(
-                          left: 20,
-                          bottom: 30,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Stack(
                             children: [
-                              Text("${user.name}, ${user.age}", style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-                              const SizedBox(height: 5),
-                              Text(user.major, style: const TextStyle(color: Colors.white70, fontSize: 14)),
+                              Positioned(
+                                right: 10,
+                                bottom: 0,
+                                top: 10,
+                                child: Opacity(
+                                  opacity: 0.8,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.asset(
+                                      user.assetPath,
+                                      fit: BoxFit.contain,
+                                      width: 140,
+                                      errorBuilder: (c, e, s) {
+                                        return const Icon(
+                                          Icons.account_circle,
+                                          size: 100,
+                                          color: Colors.white24,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                left: 20,
+                                bottom: 30,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${user.name}, ${user.age}",
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      user.major,
+                                      style: const TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Positioned(
+                                top: 15,
+                                left: 15,
+                                child: GestureDetector(
+                                  onTap: () => _handleReject(user),
+                                  child: const CircleAvatar(
+                                    radius: 18,
+                                    backgroundColor: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                top: 15,
+                                right: 15,
+                                child: GestureDetector(
+                                  onTap: () => _handleLike(user),
+                                  child: const CircleAvatar(
+                                    radius: 18,
+                                    backgroundColor: Colors.pink,
+                                    child: Icon(
+                                      Icons.favorite,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
-                        ),
-                        Positioned(
-                          top: 15,
-                          left: 15,
-                          child: GestureDetector(
-                            onTap: () => _handleReject(user),
-                            child: const CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.red,
-                              child: Icon(Icons.close, color: Colors.white, size: 18),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 15,
-                          right: 15,
-                          child: GestureDetector(
-                            onTap: () => _handleLike(user),
-                            child: const CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.pink,
-                              child: Icon(Icons.favorite, color: Colors.white, size: 18),
-                            ),
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
           ],
         ),
@@ -391,7 +534,10 @@ class _HomeScreenState extends State<HomeScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: "Booking"),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notification"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications),
+            label: "Notification",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
@@ -463,7 +609,10 @@ class AppDrawer extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const Signupscreen()),
               );
             },
-            child: const Text('Logout', style: TextStyle(color: Color(0xFF7C4DFF))),
+            child: const Text(
+              'Logout',
+              style: TextStyle(color: Color(0xFF7C4DFF)),
+            ),
           ),
         ],
       ),
@@ -521,10 +670,7 @@ class _DrawerHeader extends StatelessWidget {
                   SizedBox(height: 2),
                   Text(
                     'D24316883',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),
@@ -538,10 +684,7 @@ class _DrawerHeader extends StatelessWidget {
           right: 0,
           child: ClipPath(
             clipper: _WaveClipper(),
-            child: Container(
-              height: 30,
-              color: Colors.white,
-            ),
+            child: Container(height: 30, color: Colors.white),
           ),
         ),
         // Back arrow
@@ -564,10 +707,7 @@ class _WaveClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     final path = Path();
     path.moveTo(0, size.height);
-    path.quadraticBezierTo(
-      size.width / 2, 0,
-      size.width, size.height,
-    );
+    path.quadraticBezierTo(size.width / 2, 0, size.width, size.height);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.close();
@@ -601,7 +741,7 @@ class _DrawerBody extends StatelessWidget {
       child: Column(
         children: [
           ...items.map(
-                (item) => Padding(
+            (item) => Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: _DrawerMenuItem(
                 icon: item.icon,
@@ -621,6 +761,7 @@ class _DrawerBody extends StatelessWidget {
 class _MenuItem {
   final IconData icon;
   final String label;
+
   const _MenuItem({required this.icon, required this.label});
 }
 
@@ -672,6 +813,7 @@ class _DrawerMenuItem extends StatelessWidget {
 
 class _LogoutButton extends StatelessWidget {
   final VoidCallback onTap;
+
   const _LogoutButton({required this.onTap});
 
   @override
@@ -684,10 +826,7 @@ class _LogoutButton extends StatelessWidget {
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 13),
           shape: const StadiumBorder(),
-          textStyle: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
+          textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
           elevation: 0,
         ),
         onPressed: onTap,
@@ -730,10 +869,7 @@ class _FilterScreenState extends State<FilterScreen> {
     "Syariah",
   ];
 
-  final List<String> _ageRanges = [
-    "18-20",
-    "21-25",
-  ];
+  final List<String> _ageRanges = ["18-20", "21-25"];
 
   @override
   void initState() {
@@ -753,7 +889,10 @@ class _FilterScreenState extends State<FilterScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Search Filter", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: const Text(
+          "Search Filter",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
       ),
       body: Padding(
@@ -762,7 +901,14 @@ class _FilterScreenState extends State<FilterScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Course Section
-            const Text("Course", style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text(
+              "Course",
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -786,13 +932,23 @@ class _FilterScreenState extends State<FilterScreen> {
                       });
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF8A4FFF) : Colors.transparent,
+                        color: isSelected
+                            ? const Color(0xFF8A4FFF)
+                            : Colors.transparent,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(color: Colors.white24),
                       ),
-                      child: Text(course, style: TextStyle(color: isSelected ? Colors.white : Colors.white70)),
+                      child: Text(
+                        course,
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.white70,
+                        ),
+                      ),
                     ),
                   );
                 }).toList(),
@@ -802,7 +958,14 @@ class _FilterScreenState extends State<FilterScreen> {
             const SizedBox(height: 24),
 
             // Age Section
-            const Text("Age", style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text(
+              "Age",
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(16),
@@ -828,12 +991,19 @@ class _FilterScreenState extends State<FilterScreen> {
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         padding: const EdgeInsets.symmetric(vertical: 12),
                         decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFF8A4FFF) : Colors.transparent,
+                          color: isSelected
+                              ? const Color(0xFF8A4FFF)
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white24),
                         ),
                         child: Center(
-                          child: Text(ageRange, style: TextStyle(color: isSelected ? Colors.white : Colors.white70)),
+                          child: Text(
+                            ageRange,
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.white70,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -863,7 +1033,10 @@ class _FilterScreenState extends State<FilterScreen> {
                         border: Border.all(color: Colors.white38),
                       ),
                       child: const Center(
-                        child: Text("Reset", style: TextStyle(color: Colors.white70)),
+                        child: Text(
+                          "Reset",
+                          style: TextStyle(color: Colors.white70),
+                        ),
                       ),
                     ),
                   ),
@@ -885,7 +1058,13 @@ class _FilterScreenState extends State<FilterScreen> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: const Center(
-                        child: Text("Apply Filter", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        child: Text(
+                          "Apply Filter",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),

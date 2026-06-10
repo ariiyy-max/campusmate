@@ -64,7 +64,10 @@ class DrawerScreen extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Logout', style: TextStyle(color: Color(0xFF7C4DFF))),
+            child: const Text(
+              'Logout',
+              style: TextStyle(color: Color(0xFF7C4DFF)),
+            ),
           ),
         ],
       ),
@@ -84,8 +87,17 @@ class _DrawerHeader extends StatelessWidget {
         // Purple background
         Container(
           width: double.infinity,
-          color: const Color(0xFF6A3FA0),
-          padding: const EdgeInsets.fromLTRB(16, 48, 16, 36),
+          height: 166,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/backdrawer.jpeg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Positioned(
+          left: 16,
+          bottom: 30,
           child: Row(
             children: [
               // Avatar
@@ -98,15 +110,10 @@ class _DrawerHeader extends StatelessWidget {
                   border: Border.all(color: Colors.white54, width: 2),
                 ),
                 child: ClipOval(
-                  child: Icon(
-                    Icons.face,
-                    size: 40,
-                    color: const Color(0xFF6A3FA0),
+                  child: Image.asset("images/profilepersonjpeg-removebg-preview.png", fit: BoxFit.cover),
                   ),
-                  // Replace with actual image:
                   // child: Image.asset('assets/avatar_maya.png', fit: BoxFit.cover),
                 ),
-              ),
               const SizedBox(width: 12),
               // Name + ID
               Column(
@@ -124,10 +131,7 @@ class _DrawerHeader extends StatelessWidget {
                   SizedBox(height: 2),
                   Text(
                     'D24316883',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),
@@ -141,10 +145,7 @@ class _DrawerHeader extends StatelessWidget {
           right: 0,
           child: ClipPath(
             clipper: _WaveClipper(),
-            child: Container(
-              height: 30,
-              color: Colors.white,
-            ),
+            child: Container(height: 30, color: Colors.white),
           ),
         ),
         // Back arrow
@@ -167,10 +168,7 @@ class _WaveClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     final path = Path();
     path.moveTo(0, size.height);
-    path.quadraticBezierTo(
-      size.width / 2, 0,
-      size.width, size.height,
-    );
+    path.quadraticBezierTo(size.width / 2, 0, size.width, size.height);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.close();
@@ -204,7 +202,7 @@ class _DrawerBody extends StatelessWidget {
       child: Column(
         children: [
           ...items.map(
-                (item) => Padding(
+            (item) => Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: _DrawerMenuItem(
                 icon: item.icon,
@@ -224,6 +222,7 @@ class _DrawerBody extends StatelessWidget {
 class _MenuItem {
   final IconData icon;
   final String label;
+
   const _MenuItem({required this.icon, required this.label});
 }
 
@@ -275,6 +274,7 @@ class _DrawerMenuItem extends StatelessWidget {
 
 class _LogoutButton extends StatelessWidget {
   final VoidCallback onTap;
+
   const _LogoutButton({required this.onTap});
 
   @override
@@ -287,21 +287,23 @@ class _LogoutButton extends StatelessWidget {
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 13),
           shape: const StadiumBorder(),
-          textStyle: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
-          ),
+          textStyle: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
           elevation: 0,
         ),
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(
-                builder: (context) => const Signupscreen()),
-            );
-          },
-        child: const Text('Logout',style: TextStyle(
-          fontSize: 16, fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),)
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const Signupscreen()),
+          );
+        },
+        child: const Text(
+          'Logout',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }

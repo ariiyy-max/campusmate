@@ -1,5 +1,5 @@
 import 'package:campusmate/compatibility_quiz.dart';
-import 'package:campusmate/homescreen.dart';
+import 'package:campusmate/homescreen.dart' hide MyApp;
 import 'package:flutter/material.dart';
 import 'Signupscreen.dart';
 
@@ -176,7 +176,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isFormValid? const Color(0xFF6B42C6) : const Color(0xFF6B42C6).withOpacity(0.2),
+                    backgroundColor: _isFormValid? const Color(0xFF7848B6) : const Color(0xFF7848B6).withOpacity(0.2),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                     elevation: _isFormValid ? 2:0,
                   ),

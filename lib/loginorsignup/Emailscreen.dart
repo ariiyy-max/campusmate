@@ -13,7 +13,11 @@ class EmailScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF1A1040), Color(0xFF4B0082)],
+            colors: [
+              Color(0xFF090A21), // Dark top
+              Color(0xFF26084D), // Deep purple mid
+              Color(0xFF75056B), // Magenta bottom
+            ],
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),

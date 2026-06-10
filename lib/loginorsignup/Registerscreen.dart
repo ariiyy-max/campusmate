@@ -1,4 +1,5 @@
-import 'package:campusmate/homescreen.dart';
+import 'package:campusmate/compatibility_quiz.dart';
+import 'package:campusmate/homescreen.dart' hide MyApp;
 import 'package:flutter/material.dart';
 import 'Signupscreen.dart';
 
@@ -54,7 +55,11 @@ class _RegisterscreenState extends State<Registerscreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF0D0614), Color(0xFF3B145A)],
+            colors:[
+              Color(0xFF090A21), // Dark top
+          Color(0xFF26084D), // Deep purple mid
+          Color(0xFF75056B), // Magenta bottom
+          ],
           ),
         ),
         child: SingleChildScrollView(
@@ -171,14 +176,14 @@ class _RegisterscreenState extends State<Registerscreen> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isFormValid? const Color(0xFF6B42C6) : const Color(0xFF6B42C6).withOpacity(0.2),
+                    backgroundColor: _isFormValid? const Color(0xFF7848B6) : const Color(0xFF7848B6).withOpacity(0.2),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                     elevation: _isFormValid ? 2:0,
                   ),
                   onPressed: _isFormValid? () {
                     print("Register clicked!");
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => const HomeScreen()),
+                        builder: (context) => const MyApp()),
                     );
                   }
                   : null,

@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart'as path;
-import 'package:campusmate/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -2826,7 +2825,7 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const HomeScreen()));
+                            builder: (context) => const BirthdayScreen()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5A2E91),

@@ -1,9 +1,11 @@
 import 'package:campusmate/loginorsignup/Emailscreen.dart';
+import 'package:campusmate/loginorsignup/forgetpassw.dart';
 import 'package:flutter/material.dart';
 import 'Registerscreen.dart';
 import 'Phonescreen.dart';
 import 'Emailscreen.dart';
 import 'package:campusmate/homescreen.dart';
+import 'forgetpassw.dart';
 
 class Signupscreen extends StatefulWidget {
   const Signupscreen({super.key});
@@ -48,18 +50,16 @@ class _SignupscreenState extends State<Signupscreen> {
         body: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              stops: [0.35, 0.73],
               colors: [
-                Color(0x330404C4),
-                // #0404C4
-                Color(0x44EF05F3),
-                // #EF05F3
-                // first colors: [Color(0xFF0D0614), Color(0xFF3B145A)], // Gradient from UI
+                Color(0xFF090A21),
+                Color(0xFF26084D),
+                Color(0xFF75056B),
               ],
+              stops: [0.0,0.45,1.0],
             ),
           ),
           child: SingleChildScrollView(
@@ -101,11 +101,15 @@ class _SignupscreenState extends State<Signupscreen> {
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                onPressed: () =>
-                    Navigator.pushNamed(context, '//forgetscreen'),
+                onPressed: () {
+                  Navigator.push(
+                    context, MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordScreen()),
+                  );
+                },
                 child: const Text('Forgot Password?',
                     style: TextStyle(color: Colors.grey, fontSize: 12)),
-              ),
+              )
             ),
             const SizedBox(height: 10),
 

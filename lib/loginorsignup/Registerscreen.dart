@@ -54,7 +54,11 @@ class _RegisterscreenState extends State<Registerscreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF0D0614), Color(0xFF3B145A)],
+            colors:[
+              Color(0xFF090A21), // Dark top
+          Color(0xFF26084D), // Deep purple mid
+          Color(0xFF75056B), // Magenta bottom
+          ],
           ),
         ),
         child: SingleChildScrollView(

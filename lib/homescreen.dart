@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'loginorsignup/Signupscreen.dart';
+import 'chat.dart'; // Changed from 'chatscreen.dart' to 'chat.dart'
 
 void main() {
   runApp(const MyApp());
@@ -53,14 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   bool isFindMatchSelected = true;
 
-  // Search controller
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  // Filter options
   FilterOptions _currentFilter = FilterOptions();
 
-  // Original complete list of profiles
   final List<UserProfile> _allProfiles = [
     UserProfile(name: "Mia", age: 27, major: "Information Technology", assetPath: "assets/avatar1.png"),
     UserProfile(name: "Lexa", age: 19, major: "Information Technology", assetPath: "assets/avatar2.png"),
@@ -75,24 +73,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<UserProfile> activeProfiles = [];
   List<UserProfile> historyProfiles = [];
+  Set<String> sentRequests = {};
 
-  // Filtered active profiles based on search and filter
   List<UserProfile> getFilteredActiveProfiles() {
     List<UserProfile> filtered = List.from(activeProfiles);
-
-    // Apply search filter
     if (_searchQuery.isNotEmpty) {
       filtered = filtered.where((profile) =>
           profile.name.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
     }
-
-    // Apply course filter
     if (_currentFilter.course != null && _currentFilter.course!.isNotEmpty) {
       filtered = filtered.where((profile) =>
       profile.major == _currentFilter.course).toList();
     }
-
-    // Apply age filter
     if (_currentFilter.ageRange != null) {
       filtered = filtered.where((profile) {
         final age = profile.age;
@@ -101,23 +93,19 @@ class _HomeScreenState extends State<HomeScreen> {
         return true;
       }).toList();
     }
-
     return filtered;
   }
 
   List<UserProfile> getFilteredHistoryProfiles() {
     List<UserProfile> filtered = List.from(historyProfiles);
-
     if (_searchQuery.isNotEmpty) {
       filtered = filtered.where((profile) =>
           profile.name.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
     }
-
     if (_currentFilter.course != null && _currentFilter.course!.isNotEmpty) {
       filtered = filtered.where((profile) =>
       profile.major == _currentFilter.course).toList();
     }
-
     if (_currentFilter.ageRange != null) {
       filtered = filtered.where((profile) {
         final age = profile.age;
@@ -126,7 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
         return true;
       }).toList();
     }
-
     return filtered;
   }
 
@@ -140,11 +127,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _handleLike(UserProfile profile) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('You liked ${profile.name}!'),
-        duration: const Duration(seconds: 1),
-        backgroundColor: const Color(0xFF8A4FFF),
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => SendRequestDialog(
+        userName: profile.name,
+        userMajor: profile.major,
+        onRequestSent: () {
+          setState(() {
+            sentRequests.add(profile.name);
+          });
+        },
+        onMatch: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('It\'s a match! Check your messages.'),
+              duration: Duration(seconds: 2),
+              backgroundColor: Color(0xFF8A4FFF),
+            ),
+          );
+        },
+        onDialogClose: () {},
       ),
     );
   }
@@ -192,14 +195,18 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-        title: const Text("CampusMate", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-        // Removed the actions parameter to remove the profile icon
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Text("CampusMate", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+            Text("Hello, Maya", style: TextStyle(color: Colors.white60, fontSize: 12)),
+          ],
+        ),
       ),
       drawer: const AppDrawer(),
       body: SafeArea(
         child: Column(
           children: [
-            // Search Bar with Filter Icon
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: Row(
@@ -252,8 +259,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-
-            // Navigation Sliding Toggle Button Filter Tab
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Container(
@@ -294,8 +299,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
-            // Roommate Profiles List
             Expanded(
               child: currentList.isEmpty
                   ? const Center(child: Text("No profiles found", style: TextStyle(color: Colors.white38)))
@@ -304,6 +307,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: currentList.length,
                 itemBuilder: (context, index) {
                   final user = currentList[index];
+                  final requestSent = sentRequests.contains(user.name);
+
                   return Container(
                     margin: const EdgeInsets.only(bottom: 20),
                     height: 220,
@@ -361,10 +366,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           right: 15,
                           child: GestureDetector(
                             onTap: () => _handleLike(user),
-                            child: const CircleAvatar(
+                            child: CircleAvatar(
                               radius: 18,
-                              backgroundColor: Colors.pink,
-                              child: Icon(Icons.favorite, color: Colors.white, size: 18),
+                              backgroundColor: requestSent ? Colors.grey : Colors.pink,
+                              child: Icon(
+                                requestSent ? Icons.check : Icons.favorite,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                             ),
                           ),
                         ),
@@ -384,9 +393,36 @@ class _HomeScreenState extends State<HomeScreen> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          if (index == 3) {
+            // Chat tab selected - navigate to ChatScreen
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ChatScreenWrapper(),
+              ),
+            ).then((_) {
+              // When returning from chat, reset index to keep Home tab selected
+              setState(() {
+                _currentIndex = 0;
+              });
+            });
+          } else if (index == 4) {
+            // Profile tab - navigate to ProfileScreen
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProfileScreenWrapper(),
+              ),
+            ).then((_) {
+              setState(() {
+                _currentIndex = 0;
+              });
+            });
+          } else {
+            setState(() {
+              _currentIndex = index;
+            });
+          }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
@@ -395,6 +431,244 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
+      ),
+    );
+  }
+}
+
+// ─── Send Request Dialog ─────────────────────────────────────────────────────
+
+class SendRequestDialog extends StatefulWidget {
+  final String userName;
+  final String userMajor;
+  final VoidCallback onRequestSent;
+  final VoidCallback onMatch;
+  final VoidCallback onDialogClose;
+
+  const SendRequestDialog({
+    super.key,
+    required this.userName,
+    required this.userMajor,
+    required this.onRequestSent,
+    required this.onMatch,
+    required this.onDialogClose,
+  });
+
+  @override
+  State<SendRequestDialog> createState() => _SendRequestDialogState();
+}
+
+class _SendRequestDialogState extends State<SendRequestDialog> {
+  int dialogState = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30),
+          gradient: const LinearGradient(
+            colors: [Color(0xFFF3EEFF), Color(0xFFE5D9FA)],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 35),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (dialogState == 0) ...[
+              const Text(
+                "Send Interest",
+                style: TextStyle(fontSize: 30, color: Color(0xFF8A4FFF), fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              const CircleAvatar(
+                radius: 45,
+                backgroundColor: Color(0xFF8A4FFF),
+                child: Icon(Icons.person, size: 50, color: Colors.white),
+              ),
+              const SizedBox(height: 15),
+              Text(
+                widget.userName,
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              ),
+              Text(
+                widget.userMajor,
+                style: const TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+              const SizedBox(height: 25),
+              Text(
+                "Interested to become roommates with ${widget.userName}?",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16, color: Colors.black87),
+              ),
+              const SizedBox(height: 30),
+              _buildPrimaryButton("SEND REQUEST", () {
+                setState(() => dialogState = 1);
+                widget.onRequestSent();
+              }),
+              const SizedBox(height: 10),
+              _buildSecondaryButton("CANCEL", () {
+                widget.onDialogClose();
+                Navigator.pop(context);
+              }),
+            ] else if (dialogState == 1) ...[
+              const Text(
+                "Request Sent",
+                style: TextStyle(fontSize: 30, color: Color(0xFF8A4FFF), fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              const CircleAvatar(
+                radius: 45,
+                backgroundColor: Color(0xFF8A4FFF),
+                child: Icon(Icons.check, size: 50, color: Colors.white),
+              ),
+              const SizedBox(height: 15),
+              Text(
+                widget.userName,
+                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
+              ),
+              Text(
+                widget.userMajor,
+                style: const TextStyle(fontSize: 14, color: Colors.black54),
+              ),
+              const SizedBox(height: 25),
+              const Text(
+                "Your roommate request was sent!",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                "Wait for ${widget.userName} to accept your request.",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 13, color: Colors.black54),
+              ),
+              const SizedBox(height: 35),
+              _buildPrimaryButton("KEEP SWIPING", () {
+                final bool isMatch = DateTime.now().millisecondsSinceEpoch % 2 == 0;
+                setState(() {
+                  dialogState = isMatch ? 2 : 3;
+                });
+                if (isMatch) {
+                  widget.onMatch();
+                }
+              }),
+            ] else if (dialogState == 2) ...[
+              const Text(
+                "It's a Match!",
+                style: TextStyle(fontSize: 32, color: Color(0xFF8A4FFF), fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                  const SizedBox(width: 10),
+                  const CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Color(0xFF8A4FFF),
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "${widget.userName} likes you too!",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15, color: Colors.black54),
+              ),
+              const SizedBox(height: 35),
+              _buildPrimaryButton("SEND A MESSAGE", () {
+                widget.onMatch();
+                Navigator.pop(context);
+              }),
+              const SizedBox(height: 10),
+              _buildSecondaryButton("KEEP SWIPING", () {
+                widget.onDialogClose();
+                Navigator.pop(context);
+              }),
+            ] else if (dialogState == 3) ...[
+              const Text(
+                "It's a Bummer",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 32, color: Color(0xFF8A4FFF), fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                  const SizedBox(width: 10),
+                  const CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.black45,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "It's not a match!",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15, color: Colors.black54),
+              ),
+              const SizedBox(height: 35),
+              _buildSecondaryButton("KEEP SWIPING", () {
+                widget.onDialogClose();
+                Navigator.pop(context);
+              }),
+            ]
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPrimaryButton(String text, VoidCallback onPressed) {
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFD600D6),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSecondaryButton(String text, VoidCallback onPressed) {
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          side: const BorderSide(color: Color(0xFFD600D6), width: 1.5),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        ),
+        onPressed: onPressed,
+        child: Text(
+          text,
+          style: const TextStyle(color: Color(0xFFD600D6), fontWeight: FontWeight.bold, fontSize: 14),
+        ),
       ),
     );
   }
@@ -471,8 +745,6 @@ class AppDrawer extends StatelessWidget {
   }
 }
 
-// ─── Drawer Header ───────────────────────────────────────────────────────────
-
 class _DrawerHeader extends StatelessWidget {
   const _DrawerHeader();
 
@@ -480,14 +752,12 @@ class _DrawerHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Purple background
         Container(
           width: double.infinity,
           color: const Color(0xFF6A3FA0),
           padding: const EdgeInsets.fromLTRB(16, 48, 16, 36),
           child: Row(
             children: [
-              // Avatar
               Container(
                 width: 52,
                 height: 52,
@@ -505,7 +775,6 @@ class _DrawerHeader extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 12),
-              // Name + ID
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -531,7 +800,6 @@ class _DrawerHeader extends StatelessWidget {
             ],
           ),
         ),
-        // Wave at bottom of header
         Positioned(
           bottom: 0,
           left: 0,
@@ -544,7 +812,6 @@ class _DrawerHeader extends StatelessWidget {
             ),
           ),
         ),
-        // Back arrow
         Positioned(
           top: 16,
           left: 8,
@@ -558,7 +825,6 @@ class _DrawerHeader extends StatelessWidget {
   }
 }
 
-// Wave clipper for the curved bottom edge of the header
 class _WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
@@ -577,8 +843,6 @@ class _WaveClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(_WaveClipper oldClipper) => false;
 }
-
-// ─── Drawer Body ─────────────────────────────────────────────────────────────
 
 class _DrawerBody extends StatelessWidget {
   final void Function(String item) onItemTap;
@@ -624,8 +888,6 @@ class _MenuItem {
   const _MenuItem({required this.icon, required this.label});
 }
 
-// ─── Menu Item Tile ───────────────────────────────────────────────────────────
-
 class _DrawerMenuItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -667,8 +929,6 @@ class _DrawerMenuItem extends StatelessWidget {
     );
   }
 }
-
-// ─── Logout Button ────────────────────────────────────────────────────────────
 
 class _LogoutButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -761,7 +1021,6 @@ class _FilterScreenState extends State<FilterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Course Section
             const Text("Course", style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
             Container(
@@ -798,10 +1057,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 }).toList(),
               ),
             ),
-
             const SizedBox(height: 24),
-
-            // Age Section
             const Text("Age", style: TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
             Container(
@@ -841,10 +1097,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 }).toList(),
               ),
             ),
-
             const SizedBox(height: 32),
-
-            // Action Buttons
             Row(
               children: [
                 Expanded(
@@ -893,6 +1146,93 @@ class _FilterScreenState extends State<FilterScreen> {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Chat Screen Wrapper ─────────────────────────────────────────────────────
+
+class ChatScreenWrapper extends StatelessWidget {
+  const ChatScreenWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const ChatScreen();
+  }
+}
+
+// ─── Profile Screen Wrapper ──────────────────────────────────────────────────
+
+class ProfileScreenWrapper extends StatelessWidget {
+  const ProfileScreenWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0F0C31),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF0F0C31),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: const Text(
+          "Profile",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const CircleAvatar(
+              radius: 50,
+              backgroundColor: Color(0xFF8A4FFF),
+              child: Icon(Icons.person, size: 50, color: Colors.white),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Maya',
+              style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'D24316883',
+              style: TextStyle(color: Colors.white38, fontSize: 16),
+            ),
+            const SizedBox(height: 24),
+            _buildProfileOption(Icons.settings, 'Settings'),
+            _buildProfileOption(Icons.help, 'Help Center'),
+            _buildProfileOption(Icons.logout, 'Logout', isLogout: true),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileOption(IconData icon, String title, {bool isLogout = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF161439),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: ListTile(
+          leading: Icon(icon, color: isLogout ? Colors.red : const Color(0xFF8A4FFF)),
+          title: Text(
+            title,
+            style: TextStyle(color: isLogout ? Colors.red : Colors.white),
+          ),
+          trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white38),
+          onTap: () {
+            if (isLogout) {
+              // Handle logout if needed
+            }
+          },
         ),
       ),
     );

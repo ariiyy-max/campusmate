@@ -53,14 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   bool isFindMatchSelected = true;
 
-  // Search controller
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  // Filter options
   FilterOptions _currentFilter = FilterOptions();
 
-  // Original complete list of profiles
   final List<UserProfile> _allProfiles = [
     UserProfile(name: "Mia", age: 27, major: "Information Technology", assetPath: "assets/avatar1.png"),
     UserProfile(name: "Lexa", age: 19, major: "Information Technology", assetPath: "assets/avatar2.png"),
@@ -75,27 +72,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<UserProfile> activeProfiles = [];
   List<UserProfile> historyProfiles = [];
-
-  // Track sent requests to avoid duplicates
   Set<String> sentRequests = {};
 
-  // Filtered active profiles based on search and filter
   List<UserProfile> getFilteredActiveProfiles() {
     List<UserProfile> filtered = List.from(activeProfiles);
-
-    // Apply search filter
     if (_searchQuery.isNotEmpty) {
       filtered = filtered.where((profile) =>
           profile.name.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
     }
-
-    // Apply course filter
     if (_currentFilter.course != null && _currentFilter.course!.isNotEmpty) {
       filtered = filtered.where((profile) =>
       profile.major == _currentFilter.course).toList();
     }
-
-    // Apply age filter
     if (_currentFilter.ageRange != null) {
       filtered = filtered.where((profile) {
         final age = profile.age;
@@ -104,23 +92,19 @@ class _HomeScreenState extends State<HomeScreen> {
         return true;
       }).toList();
     }
-
     return filtered;
   }
 
   List<UserProfile> getFilteredHistoryProfiles() {
     List<UserProfile> filtered = List.from(historyProfiles);
-
     if (_searchQuery.isNotEmpty) {
       filtered = filtered.where((profile) =>
           profile.name.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
     }
-
     if (_currentFilter.course != null && _currentFilter.course!.isNotEmpty) {
       filtered = filtered.where((profile) =>
       profile.major == _currentFilter.course).toList();
     }
-
     if (_currentFilter.ageRange != null) {
       filtered = filtered.where((profile) {
         final age = profile.age;
@@ -129,7 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
         return true;
       }).toList();
     }
-
     return filtered;
   }
 
@@ -143,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _handleLike(UserProfile profile) {
-    // Show the Send Interest Dialog
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -151,13 +133,11 @@ class _HomeScreenState extends State<HomeScreen> {
         userName: profile.name,
         userMajor: profile.major,
         onRequestSent: () {
-          // Mark request as sent
           setState(() {
             sentRequests.add(profile.name);
           });
         },
         onMatch: () {
-          // Handle match - could navigate to chat or show a special message
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('It\'s a match! Check your messages.'),
@@ -166,9 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
-        onDialogClose: () {
-          // Optional: Handle when dialog is closed
-        },
+        onDialogClose: () {},
       ),
     );
   }
@@ -217,21 +195,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         title: const Text("CampusMate", style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: const CircleAvatar(
-              backgroundColor: Colors.white24,
-              child: Icon(Icons.person, color: Colors.white),
-            ),
-          ),
-        ],
       ),
       drawer: const AppDrawer(),
       body: SafeArea(
         child: Column(
           children: [
-            // Search Bar with Filter Icon
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: Row(
@@ -284,8 +252,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-
-            // Navigation Sliding Toggle Button Filter Tab
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Container(
@@ -326,8 +292,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
-            // Roommate Profiles List
             Expanded(
               child: currentList.isEmpty
                   ? const Center(child: Text("No profiles found", style: TextStyle(color: Colors.white38)))
@@ -452,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// ─── Send Request Dialog (Connected with callbacks) ─────────────────────────
+// ─── Send Request Dialog ─────────────────────────────────────────────────────
 
 class SendRequestDialog extends StatefulWidget {
   final String userName;
@@ -475,7 +439,7 @@ class SendRequestDialog extends StatefulWidget {
 }
 
 class _SendRequestDialogState extends State<SendRequestDialog> {
-  int dialogState = 0; // 0: Send Interest, 1: Request Sent, 2: It's a Match, 3: Bummer
+  int dialogState = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -496,7 +460,6 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // State 0: Send Interest
             if (dialogState == 0) ...[
               const Text(
                 "Send Interest",
@@ -533,10 +496,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                 widget.onDialogClose();
                 Navigator.pop(context);
               }),
-            ]
-
-            // State 1: Request Sent
-            else if (dialogState == 1) ...[
+            ] else if (dialogState == 1) ...[
               const Text(
                 "Request Sent",
                 style: TextStyle(fontSize: 30, color: Color(0xFF8A4FFF), fontWeight: FontWeight.bold),
@@ -570,8 +530,6 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
               ),
               const SizedBox(height: 35),
               _buildPrimaryButton("KEEP SWIPING", () {
-                // Simulate a 50% chance of match for demo purposes
-                // In a real app, this would come from backend
                 final bool isMatch = DateTime.now().millisecondsSinceEpoch % 2 == 0;
                 setState(() {
                   dialogState = isMatch ? 2 : 3;
@@ -580,85 +538,79 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                   widget.onMatch();
                 }
               }),
+            ] else if (dialogState == 2) ...[
+              const Text(
+                "It's a Match!",
+                style: TextStyle(fontSize: 32, color: Color(0xFF8A4FFF), fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                  const SizedBox(width: 10),
+                  const CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Color(0xFF8A4FFF),
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Text(
+                "${widget.userName} likes you too!",
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 15, color: Colors.black54),
+              ),
+              const SizedBox(height: 35),
+              _buildPrimaryButton("SEND A MESSAGE", () {
+                widget.onMatch();
+                Navigator.pop(context);
+              }),
+              const SizedBox(height: 10),
+              _buildSecondaryButton("KEEP SWIPING", () {
+                widget.onDialogClose();
+                Navigator.pop(context);
+              }),
+            ] else if (dialogState == 3) ...[
+              const Text(
+                "It's a Bummer",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 32, color: Color(0xFF8A4FFF), fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                  const SizedBox(width: 10),
+                  const CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.black45,
+                    child: Icon(Icons.person, color: Colors.white),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "It's not a match!",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15, color: Colors.black54),
+              ),
+              const SizedBox(height: 35),
+              _buildSecondaryButton("KEEP SWIPING", () {
+                widget.onDialogClose();
+                Navigator.pop(context);
+              }),
             ]
-
-            // State 2: It's a Match!
-            else if (dialogState == 2) ...[
-                const Text(
-                  "It's a Match!",
-                  style: TextStyle(fontSize: 32, color: Color(0xFF8A4FFF), fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundColor: Colors.grey,
-                      child: Icon(Icons.person, color: Colors.white),
-                    ),
-                    SizedBox(width: -15),
-                    CircleAvatar(
-                      radius: 35,
-                      backgroundColor: Color(0xFF8A4FFF),
-                      child: Icon(Icons.person, color: Colors.white),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  "${widget.userName} likes you too!",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 15, color: Colors.black54),
-                ),
-                const SizedBox(height: 35),
-                _buildPrimaryButton("SEND A MESSAGE", () {
-                  widget.onMatch();
-                  Navigator.pop(context);
-                }),
-                const SizedBox(height: 10),
-                _buildSecondaryButton("KEEP SWIPING", () {
-                  widget.onDialogClose();
-                  Navigator.pop(context);
-                }),
-              ]
-
-              // State 3: Bummer (Not a match)
-              else if (dialogState == 3) ...[
-                  const Text(
-                    "It's a Bummer",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 32, color: Color(0xFF8A4FFF), fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 25),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundColor: Colors.grey,
-                        child: Icon(Icons.person, color: Colors.white),
-                      ),
-                      SizedBox(width: -15),
-                      CircleAvatar(
-                        radius: 35,
-                        backgroundColor: Colors.black45,
-                        child: Icon(Icons.person, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "It's not a match!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 15, color: Colors.black54),
-                  ),
-                  const SizedBox(height: 35),
-                  _buildSecondaryButton("KEEP SWIPING", () {
-                    widget.onDialogClose();
-                    Navigator.pop(context);
-                  }),
-                ]
           ],
         ),
       ),
@@ -702,7 +654,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
   }
 }
 
-// ─── App Drawer ─────────────────────────────────────────────────────────
+// ─── App Drawer ──────────────────────────────────────────────────────────────
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -772,8 +724,6 @@ class AppDrawer extends StatelessWidget {
     );
   }
 }
-
-// ─── Drawer Header ───────────────────────────────────────────────────────────
 
 class _DrawerHeader extends StatelessWidget {
   const _DrawerHeader();
@@ -873,8 +823,6 @@ class _WaveClipper extends CustomClipper<Path> {
   @override
   bool shouldReclip(_WaveClipper oldClipper) => false;
 }
-
-// ─── Drawer Body ─────────────────────────────────────────────────────────────
 
 class _DrawerBody extends StatelessWidget {
   final void Function(String item) onItemTap;
@@ -1098,31 +1046,31 @@ class _FilterScreenState extends State<FilterScreen> {
                 color: const Color(0xFF161439),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Row(
+              // FIX: Replace Row+Expanded with Wrap to avoid negative width constraints
+              child: Wrap(
+                spacing: 12,
                 children: _ageRanges.map((ageRange) {
                   final isSelected = _selectedAgeRange == ageRange;
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          if (isSelected) {
-                            _selectedAgeRange = null;
-                          } else {
-                            _selectedAgeRange = ageRange;
-                          }
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFF8A4FFF) : Colors.transparent,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.white24),
-                        ),
-                        child: Center(
-                          child: Text(ageRange, style: TextStyle(color: isSelected ? Colors.white : Colors.white70)),
-                        ),
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (isSelected) {
+                          _selectedAgeRange = null;
+                        } else {
+                          _selectedAgeRange = ageRange;
+                        }
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: isSelected ? const Color(0xFF8A4FFF) : Colors.transparent,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Colors.white24),
+                      ),
+                      child: Text(
+                        ageRange,
+                        style: TextStyle(color: isSelected ? Colors.white : Colors.white70),
                       ),
                     ),
                   );

@@ -1,3 +1,4 @@
+import 'package:campusmate/compatibility_quiz.dart';
 import 'package:campusmate/homescreen.dart';
 import 'package:flutter/material.dart';
 import 'Signupscreen.dart';
@@ -182,7 +183,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                   onPressed: _isFormValid? () {
                     print("Register clicked!");
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => const HomeScreen()),
+                        builder: (context) => const MyApp()),
                     );
                   }
                   : null,

@@ -1,3 +1,4 @@
+import 'package:campusmate/drawer.dart';
 import 'package:flutter/material.dart';
 
 class UserProfile {
@@ -43,6 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF0F0C31),
+
+      drawer: const DrawerScreen(),
       body: SafeArea(
         child: Column(
           children: [
@@ -52,6 +55,15 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Row(
+                    children: [
+                      IconButton(onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                          icon: const Icon (Icons.menu, color: Colors.white, size: 28),
+                      ),
+                    ],
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [

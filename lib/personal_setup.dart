@@ -1,13 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:campusmate/compatibility_quiz.dart';
 
-class PersonalSetup extends StatefulWidget {
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Onboarding Flow',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const NameInputScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+// ---------------- FIRST SCREEN: FULL NAME ----------------
+
+class NameInputScreen extends StatefulWidget {
   final String? existingName;
   final String? existingNickname;
   final String? existingCourse;
   final String? existingMatrix;
 
-  const PersonalSetup({
+  const NameInputScreen({
     super.key,
     this.existingName,
     this.existingNickname,
@@ -16,10 +39,10 @@ class PersonalSetup extends StatefulWidget {
   });
 
   @override
-  State<PersonalSetup> createState() => _PersonalSetupState();
+  State<NameInputScreen> createState() => _NameInputScreenState();
 }
 
-class _PersonalSetupState extends State<PersonalSetup> {
+class _NameInputScreenState extends State<NameInputScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
 
@@ -497,7 +520,7 @@ class _MatrixNumberInputScreenState extends State<MatrixNumberInputScreen> {
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PersonalSetup(
+                        builder: (context) => NameInputScreen(
                           existingName: widget.existingName,
                           existingNickname: widget.existingNickname,
                           existingCourse: widget.existingCourse,
@@ -601,136 +624,7 @@ class _MatrixNumberInputScreenState extends State<MatrixNumberInputScreen> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const BirthdayScreen()));
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF5A2E91),
-                      padding: const EdgeInsets.symmetric(vertical: 14.0),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
-                      elevation: 0,
-                    ),
-                    child: const Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text("Next", style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, color: Colors.white)),
-                      SizedBox(width: 6.0),
-                      Icon(Icons.arrow_forward, color: Colors.white, size: 16.0),
-                    ]),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CompatibilityQuiz extends StatefulWidget {
-  final String? existingName;
-  final String? existingNickname;
-  final String? existingCourse;
-  final String? existingMatrix;
-
-  const CompatibilityQuiz({
-    super.key,
-    this.existingName,
-    this.existingNickname,
-    this.existingCourse,
-    this.existingMatrix,
-  });
-
-  @override
-  State<CompatibilityQuiz> createState() => _CompatibilityQuizState();
-}
-
-class _CompatibilityQuizState extends State<CompatibilityQuiz> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    // Auto-fill name if already entered before
-    if (widget.existingName != null) {
-      _nameController.text = widget.existingName!;
-    }
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Progress Bar
-                SizedBox(
-                  width: double.infinity,
-                  height: 3.0,
-                  child: Stack(
-                    children: [
-                      Container(width: double.infinity, height: 3.0, color: const Color(0xFFE8E0F5)),
-                      Container(width: MediaQuery.of(context).size.width * 0.047, height: 3.0, color: const Color(0xFF5A2E91)),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 80.0),
-
-                // Title
-                const Text("What's your full name?", style: TextStyle(fontSize: 26.0, fontWeight: FontWeight.bold, color: Colors.black87, height: 1.3)),
-                const SizedBox(height: 32.0),
-
-                // Input
-                TextFormField(
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    hintText: "Enter Your full name",
-                    hintStyle: TextStyle(color: Color(0xFF9E9E9E), fontSize: 16.0),
-                    border: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFE0E0E0))),
-                    enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFE0E0E0))),
-                    focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF5A2E91))),
-                    errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent)),
-                    focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.redAccent)),
-                  ),
-                  style: const TextStyle(fontSize: 16.0),
-                  validator: (value) => value == null || value.trim().isEmpty ? "Please enter your full name" : null,
-                ),
-                const SizedBox(height: 16.0),
-                const Text("This is how it will appear on your profile.", style: TextStyle(fontSize: 14.0, color: Color(0xFF757575))),
-                const SizedBox(height: 4.0),
-                const Text("This action is permanent.", style: TextStyle(fontSize: 14.0, color: Color(0xFF757575))),
-
-                const Spacer(),
-
-                // Next — PASS ALL DATA FORWARD
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PersonalSetup(
-                              existingName: _nameController.text,
-                              existingNickname: widget.existingNickname,
-                              existingCourse: widget.existingCourse,
-                              existingMatrix: widget.existingMatrix,
-                            ),
-                          ),
-                        );
+                        _showWelcomePopup();
                       }
                     },
                     style: ElevatedButton.styleFrom(

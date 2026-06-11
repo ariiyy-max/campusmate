@@ -1,4 +1,5 @@
 import 'package:campusmate/homescreen.dart';
+import 'package:campusmate/personal_setup.dart';
 import 'package:flutter/material.dart';
 
 import 'loginorsignup/Signupscreen.dart';
@@ -75,7 +76,7 @@ class DrawerScreen extends StatelessWidget {
   }
 }
 
-// ─── Drawer Header ───────────────────────────────────────────────────────────
+// Drawer Header
 
 class _DrawerHeader extends StatelessWidget {
   const _DrawerHeader();
@@ -158,6 +159,89 @@ class _DrawerHeader extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+// app drawer
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      width: MediaQuery.of(context).size.width * 0.78,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        ),
+      ),
+      child: Column(
+        children: [
+          const _DrawerHeader(), // ✅ Your image header here
+          Expanded(
+            child: _DrawerBody(
+              onItemTap: (item) {
+                Navigator.pop(context); // Close drawer first
+                _navigateToPage(context, item); // Go to correct page
+              },
+              onLogout: () {
+                Navigator.pop(context);
+                _onLogout(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ✅ THIS IS THE IMPORTANT PART — connect text to page
+  void _navigateToPage(BuildContext context, String item) {
+    Widget page;
+    switch (item) {
+      case 'Personal information':
+        page = const PersonalSetup();
+        break;
+      case 'Help center':
+        page = const HomeScreen(); //tuka home
+        break;
+      case 'F.A.Q':
+        page = const HomeScreen(); //tuka home
+        break;
+      case 'Settings':
+        page = const HomeScreen(); //tuka home
+        break;
+      default:
+        page = const HomeScreen();
+    }
+    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+  }
+
+  void _onLogout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const Signupscreen()),
+              );
+            },
+            child: const Text('Logout', style: TextStyle(color: Color(0xFF7848B6))), // ✅ Matches your purple
+          ),
+        ],
+      ),
     );
   }
 }

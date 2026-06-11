@@ -34,7 +34,19 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.menu, color: Colors.white),
-                          onPressed: () {},
+                          onPressed: () {
+                            // You can open drawer here if needed
+                          },
+                        ),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.white),
+                          onPressed: () {
+                            // Edit profile functionality
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Edit profile coming soon!')),
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -91,21 +103,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
             ),
         ],
       ),
-
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF150E2E),
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 3, // Profile tab active
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.bookmark_border), label: 'Booking'),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications_none), label: 'Notification'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-      ),
+      // REMOVED bottomNavigationBar - now handled by main.dart
     );
   }
 
@@ -224,6 +222,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
     );
   }
 }
+
 //info card
 class ProfileInfoCard extends StatelessWidget {
   final String title;

@@ -110,6 +110,19 @@ class ChatService {
     }
     return [];
   }
+
+  // Initialize a conversation (for new matches)
+  void initializeConversation(String userId, String userName) {
+    if (!_conversations.containsKey(userId)) {
+      final newConversation = ChatConversation(
+        userId: userId,
+        userName: userName,
+        messages: [],
+        lastUpdated: DateTime.now(),
+      );
+      _conversations[userId] = newConversation;
+    }
+  }
 }
 
 // Main Chat Screen (Chat List)
@@ -461,6 +474,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   @override
   void initState() {
     super.initState();
+    // Initialize conversation if it's a new match
+    if (widget.isNewConversation) {
+      _chatService.initializeConversation(widget.userId, widget.userName);
+    }
     _loadMessages();
   }
 

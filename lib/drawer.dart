@@ -1,7 +1,7 @@
 import 'package:campusmate/homescreen.dart';
 import 'package:campusmate/personal_setup.dart';
+import 'package:campusmate/personal_profile.dart'; // Add this import
 import 'package:flutter/material.dart';
-
 import 'loginorsignup/Signupscreen.dart';
 
 void main() {
@@ -42,12 +42,19 @@ class DrawerScreen extends StatelessWidget {
   }
 
   void _onMenuItemTapped(BuildContext context, String item) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Navigating to $item'),
-        duration: const Duration(seconds: 1),
-      ),
-    );
+    if (item == 'Personal information') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const PersonalProfileScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Navigating to $item'),
+          duration: const Duration(seconds: 1),
+        ),
+      );
+    }
   }
 
   void _onLogout(BuildContext context) {
@@ -197,26 +204,36 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  // ✅ THIS IS THE IMPORTANT PART — connect text to page
+  // ✅ UPDATED: Connect text to PersonalProfileScreen
   void _navigateToPage(BuildContext context, String item) {
-    Widget page;
     switch (item) {
       case 'Personal information':
-        page = const NameInputScreen(); // Changed from PersonalSetup to NameInputScreen
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PersonalProfileScreen()),
+        );
         break;
       case 'Help center':
-        page = const HomeScreen(); //tuka home
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Help center coming soon!')),
+        );
         break;
       case 'F.A.Q':
-        page = const HomeScreen(); //tuka home
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('F.A.Q coming soon!')),
+        );
         break;
       case 'Settings':
-        page = const HomeScreen(); //tuka home
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Settings coming soon!')),
+        );
         break;
       default:
-        page = const HomeScreen();
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
     }
-    Navigator.push(context, MaterialPageRoute(builder: (context) => page));
   }
 
   void _onLogout(BuildContext context) {
@@ -238,7 +255,7 @@ class AppDrawer extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const Signupscreen()),
               );
             },
-            child: const Text('Logout', style: TextStyle(color: Color(0xFF7848B6))), // ✅ Matches your purple
+            child: const Text('Logout', style: TextStyle(color: Color(0xFF7848B6))),
           ),
         ],
       ),

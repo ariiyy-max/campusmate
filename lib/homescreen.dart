@@ -1,7 +1,6 @@
 import 'package:campusmate/drawer.dart';
 import 'package:flutter/material.dart';
 import 'loginorsignup/Signupscreen.dart';
-import 'personal_profile.dart';
 
 class UserProfile {
   final String name;
@@ -41,11 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Filter options
   FilterOptions _currentFilter = FilterOptions();
-
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const PersonalProfileScreen(),
-  ];
 
   // Original complete list of profiles
   final List<UserProfile> _allProfiles = [
@@ -227,6 +221,14 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF0F0C31),
         elevation: 0,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
+        ),
         title: const Text(
           "CampusMate",
           style: TextStyle(
@@ -237,6 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         // Removed the actions parameter to remove the profile icon
       ),
+
       body: SafeArea(
         child: Column(
           children: [
@@ -510,7 +513,10 @@ class _HomeScreenState extends State<HomeScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: "Booking"),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: "Notification",),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications),
+            label: "Notification",
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],

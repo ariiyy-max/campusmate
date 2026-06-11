@@ -3,6 +3,10 @@ import 'package:campusmate/personal_profile.dart';
 import 'package:flutter/material.dart';
 import 'loginorsignup/Signupscreen.dart';
 
+import 'drawer content/faq.dart';
+import 'drawer content/help_center.dart';
+import 'setting/setting.dart';
+
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({super.key});
 
@@ -42,13 +46,21 @@ class DrawerScreen extends StatelessWidget {
         context,
         MaterialPageRoute(builder: (context) => const PersonalProfileScreen()),
       );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Navigating to $item'),
-          duration: const Duration(seconds: 1),
-        ),
+    } else if (item == 'Help Center') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HelpCenter()),
       );
+    } else if (item == 'F.A.Q') {
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const FAQScreen()),
+    );
+    } else if (item == 'Settings') {
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const SettingsScreen()),
+    );
     }
   }
 
@@ -65,7 +77,11 @@ class DrawerScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const Signupscreen()),
+                    (route) => false,
+              );
             },
             child: const Text(
               'Logout',

@@ -55,9 +55,9 @@ class _RegisterscreenState extends State<Registerscreen> {
             end: Alignment.bottomCenter,
             colors:[
               Color(0xFF090A21), // Dark top
-          Color(0xFF26084D), // Deep purple mid
-          Color(0xFF75056B), // Magenta bottom
-          ],
+              Color(0xFF26084D), // Deep purple mid
+              Color(0xFF75056B), // Magenta bottom
+            ],
           ),
         ),
         child: SingleChildScrollView(
@@ -79,11 +79,11 @@ class _RegisterscreenState extends State<Registerscreen> {
               const SizedBox(height: 30),
 
               // Full Name
-                _buildLabel('Your Full Name'),
-                _buildTextField(
+              _buildLabel('Your Full Name'),
+              _buildTextField(
                 controller: _nameController,
-                  hintText: 'Your Full Name',
-                ),
+                hintText: 'Your Full Name',
+              ),
               const SizedBox(height: 12),
 
               // Email
@@ -106,9 +106,9 @@ class _RegisterscreenState extends State<Registerscreen> {
               // Confirm Password
               _buildLabel('Password'),
               _buildTextField(
-                controller: _confirmController, // Sediakan controller untuk baca teks
-                hintText: 'confirmpassword',
-                isPassword: true
+                  controller: _confirmController, // Sediakan controller untuk baca teks
+                  hintText: 'confirmpassword',
+                  isPassword: true
               ),
               const SizedBox(height: 20),
 
@@ -173,22 +173,22 @@ class _RegisterscreenState extends State<Registerscreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _isFormValid? const Color(0xFF7848B6) : const Color(0xFF7848B6).withOpacity(0.2),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                    elevation: _isFormValid ? 2:0,
-                  ),
-                  onPressed: _isFormValid? () {
-                    print("Register clicked!");
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => const PersonalSetup()),
-                    );
-                  }
-                  : null,
-                  child: Text('Register',style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold,
-                    color: _isFormValid? Colors.white : Colors.white30,
-                  ),)
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _isFormValid? const Color(0xFF7848B6) : const Color(0xFF7848B6).withOpacity(0.2),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                      elevation: _isFormValid ? 2:0,
+                    ),
+                    onPressed: _isFormValid? () {
+                      print("Register clicked!");
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const NameInputScreen()),
+                      );
+                    }
+                        : null,
+                    child: Text('Register',style: TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold,
+                      color: _isFormValid? Colors.white : Colors.white30,
+                    ),)
                 ),
               ),
             ],

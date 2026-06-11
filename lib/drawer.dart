@@ -112,9 +112,9 @@ class _DrawerHeader extends StatelessWidget {
                 ),
                 child: ClipOval(
                   child: Image.asset("images/profilepersonjpeg-removebg-preview.png", fit: BoxFit.cover),
-                  ),
-                  // child: Image.asset('assets/avatar_maya.png', fit: BoxFit.cover),
                 ),
+                // child: Image.asset('assets/avatar_maya.png', fit: BoxFit.cover),
+              ),
               const SizedBox(width: 12),
               // Name + ID
               Column(
@@ -202,7 +202,7 @@ class AppDrawer extends StatelessWidget {
     Widget page;
     switch (item) {
       case 'Personal information':
-        page = const PersonalSetup();
+        page = const NameInputScreen(); // Changed from PersonalSetup to NameInputScreen
         break;
       case 'Help center':
         page = const HomeScreen(); //tuka home
@@ -286,7 +286,7 @@ class _DrawerBody extends StatelessWidget {
       child: Column(
         children: [
           ...items.map(
-            (item) => Padding(
+                (item) => Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: _DrawerMenuItem(
                 icon: item.icon,

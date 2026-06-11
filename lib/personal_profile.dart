@@ -1,21 +1,82 @@
+import 'package:campusmate/compatibility_quiz.dart';
 import 'package:flutter/material.dart';
 
-class PersonalProfileScreen extends StatefulWidget {
-  const PersonalProfileScreen({Key? key}) : super(key: key);
+// ✅ RENAMED CLASS — NO CONFLICTS NOW
+class UserProfileAbout {
+  final String course;
+  final String birthday;
+  final String sleepSchedule;
+  final String noiseLevel;
+  final String smoking;
+  final String alcohol;
+  final String? profileImagePath;
 
-  @override
-  State<PersonalProfileScreen> createState() => _PersonalProfileScreenState();
+  const UserProfileAbout({
+    required this.course,
+    required this.birthday,
+    required this.sleepSchedule,
+    required this.noiseLevel,
+    required this.smoking,
+    required this.alcohol,
+    this.profileImagePath,
+  });
+
+  factory UserProfileAbout.empty() => const UserProfileAbout(
+    course: 'Not set yet',
+    birthday: 'Not set yet',
+    sleepSchedule: 'Not set yet',
+    noiseLevel: 'Not set yet',
+    smoking: 'Not set yet',
+    alcohol: 'Not set yet',
+  );
 }
 
-class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
+class PersonalProfile extends StatefulWidget {
+  const PersonalProfile({super.key});
+
+  @override
+  State<PersonalProfile> createState() => _PersonalProfileScreenState();
+}
+
+class _PersonalProfileScreenState extends State<PersonalProfile> {
   bool _isAvatarExpanded = false;
+
+  // ✅ USE YOUR NEW CLASS NAME
+  UserProfileAbout _userProfile = UserProfileAbout.empty();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfileData();
+  }
+
+  void _loadUserProfileData() {
+    setState(() {
+      _userProfile = const UserProfileAbout(
+        course: 'Diploma Information Technology',
+        birthday: '25 / 12 / 2007',
+        sleepSchedule: 'Night owl',
+        noiseLevel: 'I\'m the one who making noise',
+        smoking: 'Non-smoker',
+        alcohol: 'Never',
+      );
+    });
+  }
+
+  // ✅ UPDATE PROFILE WHEN DATA COMES BACK
+  void updateProfile(UserProfileAbout newProfile) {
+    setState(() {
+      _userProfile = newProfile;
+    });
+    // You can save to SharedPreferences/Firebase here later
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Main Scrollable Content
+          // Main Background Gradient
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -29,23 +90,29 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                 children: [
                   // Custom AppBar
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
                     child: Row(
                       children: [
                         IconButton(
                           icon: const Icon(Icons.menu, color: Colors.white),
-                          onPressed: () {
-                            // You can open drawer here if needed
-                          },
+                          onPressed: () {},
                         ),
                         const Spacer(),
                         IconButton(
                           icon: const Icon(Icons.edit, color: Colors.white),
-                          onPressed: () {
-                            // Edit profile functionality
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Edit profile coming soon!')),
+                          onPressed: () async {
+                            // ✅ OPEN QUIZ & WAIT FOR RESULT
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CompatibilityQuizScreen(),
+                              ),
                             );
+                            // ✅ UPDATE PROFILE IF DATA RECEIVED
+                            if (result is UserProfileAbout) {
+                              updateProfile(result);
+                            }
                           },
                         ),
                       ],
@@ -93,7 +160,8 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       color: const Color(0xFF1E1E1E),
                       borderRadius: BorderRadius.circular(32),
                       image: const DecorationImage(
-                        image: AssetImage('assets/avatar.png'), // Replace with your image
+                        image: AssetImage(
+                            'assets/images/profilepersonjpeg-removebg-preview.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -103,7 +171,6 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
             ),
         ],
       ),
-      // REMOVED bottomNavigationBar - now handled by main.dart
     );
   }
 
@@ -120,7 +187,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 image: const DecorationImage(
-                  image: AssetImage('assets/banner.png'), // Replace with your image
+                  image: AssetImage('assets/images/backdrawer.jpeg'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -142,7 +209,8 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       child: const CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.white,
-                        backgroundImage: AssetImage('assets/avatar.png'), // Replace with your image
+                        backgroundImage: AssetImage(
+                            'assets/images/profilepersonjpeg-removebg-preview.png'),
                       ),
                     ),
                     // Edit Icon
@@ -165,7 +233,8 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
         // Name and Handles
         const Text(
           'Maya',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+          style: TextStyle(
+              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const Text(
           'Dump | IT',
@@ -175,7 +244,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
 
         // About Tab Button
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 12),
@@ -186,7 +255,8 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
             child: const Center(
               child: Text(
                 'About',
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -196,24 +266,24 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
   }
 
   Widget _buildProfileInfoList() {
-    // Mock data based on your UI cards
+    // ✅ NOW SHOWS LIVE DATA FROM _userProfile
     final infoItems = [
-      {'title': 'Course', 'value': 'Diploma Information Technology'},
-      {'title': 'Birthday Date', 'value': '25 / 12 / 2007'},
-      {'title': 'Sleep Schedule', 'value': 'Night owl'},
-      {'title': 'Noise level at night', 'value': 'I\'m the one who making noise'},
-      {'title': 'Smoking level', 'value': 'Non-smoker'},
-      {'title': 'Consume alcohol', 'value': 'Never'},
+      {'title': 'Course', 'value': _userProfile.course},
+      {'title': 'Birthday Date', 'value': _userProfile.birthday},
+      {'title': 'Sleep Schedule', 'value': _userProfile.sleepSchedule},
+      {'title': 'Noise level at night', 'value': _userProfile.noiseLevel},
+      {'title': 'Smoking level', 'value': _userProfile.smoking},
+      {'title': 'Consume alcohol', 'value': _userProfile.alcohol},
     ];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 30.0),
       child: ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: infoItems.length,
         itemBuilder: (context, index) {
-          return ProfileInfoCard(
+          return RoommateProfileInfoCard(
             title: infoItems[index]['title']!,
             value: infoItems[index]['value']!,
           );
@@ -223,12 +293,12 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
   }
 }
 
-//info card
-class ProfileInfoCard extends StatelessWidget {
+// Info Card Widget
+class RoommateProfileInfoCard extends StatelessWidget {
   final String title;
   final String value;
 
-  const ProfileInfoCard({
+  const RoommateProfileInfoCard({
     Key? key,
     required this.title,
     required this.value,

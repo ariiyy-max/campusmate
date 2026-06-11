@@ -1,4 +1,3 @@
-import 'package:campusmate/homescreen.dart';
 import 'package:campusmate/personal_profile.dart';
 import 'package:flutter/material.dart';
 import 'loginorsignup/Signupscreen.dart';
@@ -44,7 +43,7 @@ class DrawerScreen extends StatelessWidget {
     if (item == 'Personal information') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const PersonalProfileScreen()),
+        MaterialPageRoute(builder: (context) => const PersonalProfile()),
       );
     } else if (item == 'Help Center') {
       Navigator.push(

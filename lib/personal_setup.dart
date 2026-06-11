@@ -1,6 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:campusmate/compatibility_quiz.dart';
 
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Onboarding Flow',
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const NameInputScreen(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
 // ---------------- FIRST SCREEN: FULL NAME ----------------
 
 class NameInputScreen extends StatefulWidget {

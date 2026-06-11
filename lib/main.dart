@@ -205,7 +205,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     const BookingScreen(),
     const NotificationScreen(),
     const ChatScreen(),
-    const PersonalProfileScreen(),
+    const PersonalProfile(),
   ];
 
   void _onItemTapped(int index) {

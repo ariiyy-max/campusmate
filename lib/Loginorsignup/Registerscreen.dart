@@ -3,6 +3,8 @@ import 'package:campusmate/personal_setup.dart';
 import 'package:campusmate/Loginorsignup/Phonescreen.dart';
 import 'package:campusmate/Loginorsignup/Emailscreen.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 
 class Registerscreen extends StatefulWidget {
   const Registerscreen({super.key});
@@ -99,7 +101,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PersonalSetup(),
+                        builder: (context) => const NameInputScreen(),
                       ),
                     );
                   },
@@ -235,7 +237,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PersonalSetup(),
+                        builder: (context) => const NameInputScreen(),
                       ),
                     );
                   }

@@ -6,8 +6,11 @@ import 'personal_profile.dart';
 import 'booking_screen.dart';
 import 'notification_screen.dart';
 import 'Loginorsignup/Registerscreen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

@@ -3,7 +3,7 @@ import 'package:campusmate/Loginorsignup/Registerscreen.dart';
 import 'package:campusmate/Loginorsignup/forgetpassw.dart';
 import 'package:campusmate/Loginorsignup/Emailscreen.dart';
 import 'package:campusmate/Loginorsignup/Phonescreen.dart';
-import 'package:campusmate/homescreen.dart';
+import 'package:campusmate/main_navigation.dart';
 
 class Signupscreen extends StatefulWidget {
   const Signupscreen({super.key});
@@ -84,18 +84,15 @@ class _SignupscreenState extends State<Signupscreen> {
                 ),
                 const SizedBox(height: 30),
 
-                // Username Field
                 _buildLabel('Username'),
                 _buildTextField(hintText: '',
                   controller: _UsernameController,),
                 const SizedBox(height: 20),
 
-                // Password Field
                 _buildLabel('Password'),
                 _buildTextField(hintText: '', isPassword: true,
                   controller: _PasswordController,),
 
-                // Forgot Password link
                 Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
@@ -111,7 +108,6 @@ class _SignupscreenState extends State<Signupscreen> {
                 ),
                 const SizedBox(height: 10),
 
-                // Or Login With Divider
                 Row(
                   children: const [
                     Expanded(child: Divider(color: Colors.white30)),
@@ -125,14 +121,12 @@ class _SignupscreenState extends State<Signupscreen> {
                 ),
                 const SizedBox(height: 20),
 
-                // Social Buttons
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () {
                       Navigator.push(context, MaterialPageRoute(
                           builder: (context) => const Phonescreen()));
-                      // Tindakan bila tekan Skip
                     },
                     icon: const Icon(Icons.phone_android, color: Colors.white),
                     label: const Text('Login with Phone'),
@@ -164,7 +158,6 @@ class _SignupscreenState extends State<Signupscreen> {
                 ),
                 const SizedBox(height: 25),
 
-                // Register Link
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -182,7 +175,6 @@ class _SignupscreenState extends State<Signupscreen> {
                 ),
                 const SizedBox(height: 30),
 
-                // Login Button
                 SizedBox(
                   width: double.infinity,
                   height: 50,
@@ -196,8 +188,8 @@ class _SignupscreenState extends State<Signupscreen> {
                     ),
                     onPressed: _isFormValid ? () {
                       print("Username: ${_UsernameController.text}");
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const HomeScreen()),
+                      Navigator.pushReplacement(context, MaterialPageRoute(
+                          builder: (context) => const MainNavigationScreen()),
                       );
                     } : null,
                     child: Text(
@@ -217,7 +209,6 @@ class _SignupscreenState extends State<Signupscreen> {
     );
   }
 
-  // Helper widget to build labels
   static Widget _buildLabel(String text) {
     return Align(
       alignment: Alignment.centerLeft,
@@ -229,7 +220,6 @@ class _SignupscreenState extends State<Signupscreen> {
     );
   }
 
-  // Helper widget for matching Text Fields
   static Widget _buildTextField(
       {required TextEditingController controller,
         required String hintText,

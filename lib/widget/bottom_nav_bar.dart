@@ -17,13 +17,9 @@ class CustomBottomNavBar extends StatelessWidget {
       backgroundColor: const Color(0xFF0F0C31),
       selectedItemColor: const Color(0xFF8A4FFF),
       unselectedItemColor: Colors.white54,
-      currentIndex: currentIndex,
-      onTap: onTap,
+      currentIndex: currentIndex, // Received from MainScreen
+      onTap: onTap,               // Triggers the function in MainScreen
       items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.book_online),
           label: 'Booking',

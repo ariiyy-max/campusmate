@@ -1,4 +1,3 @@
-import 'package:campusmate/personal_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:campusmate/personal_setup.dart';
 
@@ -182,7 +181,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                   onPressed: _isFormValid? () {
                     print("Register clicked!");
                     Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => const PersonalProfileScreen()),
+                        builder: (context) => const PersonalSetup()),
                     );
                   }
                   : null,

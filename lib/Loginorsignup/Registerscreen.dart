@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:campusmate/personal_setup.dart';
 import 'package:campusmate/Loginorsignup/Phonescreen.dart';
 import 'package:campusmate/Loginorsignup/Emailscreen.dart';
+import 'package:flutter/services.dart';
 
 class Registerscreen extends StatefulWidget {
   const Registerscreen({super.key});
@@ -27,12 +28,20 @@ class _RegisterscreenState extends State<Registerscreen> {
     _confirmController.addListener(_validateForm);
   }
   void _validateForm() {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text;
+    String confirmPassword = _confirmController.text;
+
+    bool isEmailValid = RegExp(
+      r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$',
+    ).hasMatch(email);
+
     setState(() {
-      // Pastikan semua 4 kotak ada isi
-      _isFormValid = _nameController.text.trim().isNotEmpty &&
-          _emailController.text.trim().isNotEmpty &&
-          _passwordController.text.trim().isNotEmpty &&
-          _confirmController.text.trim().isNotEmpty;
+      _isFormValid =
+          _nameController.text.trim().isNotEmpty &&
+              isEmailValid &&
+              password.length >= 8 &&
+              password == confirmPassword;
     });
   }
   @override
@@ -71,7 +80,29 @@ class _RegisterscreenState extends State<Registerscreen> {
                 alignment: Alignment.centerLeft,
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    String email = _emailController.text.trim();
+
+                    bool isEmailValid = RegExp(
+                      r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(email);
+
+                    if (!isEmailValid) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Please enter a valid email address"),
+                        ),
+                      );
+                      return;
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PersonalSetup(),
+                      ),
+                    );
+                  },
                 ),
               ),
               const Text(
@@ -85,6 +116,9 @@ class _RegisterscreenState extends State<Registerscreen> {
               _buildTextField(
                 controller: _nameController,
                 hintText: 'Your Full Name',
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r"[a-zA-Z\s]")),
+                ],
               ),
               const SizedBox(height: 12),
 
@@ -93,13 +127,14 @@ class _RegisterscreenState extends State<Registerscreen> {
               _buildTextField(
                 controller: _emailController,
                 hintText: 'Email',
+                keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 12),
 
               // Password
               _buildLabel('Password'),
               _buildTextField(
-                controller: _passwordController,
+                controller: _passwordController, // Sediakan controller untuk baca teks
                 hintText: 'Password',
                 isPassword: true,
               ),
@@ -108,7 +143,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               // Confirm Password
               _buildLabel('Password'),
               _buildTextField(
-                  controller: _confirmController,
+                  controller: _confirmController, // Sediakan controller untuk baca teks
                   hintText: 'confirmpassword',
                   isPassword: true
               ),
@@ -127,46 +162,32 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 16),
 
-              // Login with Phone Button
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const Phonescreen()));
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 45,
-                  decoration: BoxDecoration(color: const Color(0xFF1E272C), borderRadius: BorderRadius.circular(25)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.phone, color: Colors.white, size: 18),
-                      SizedBox(width: 10),
-                      Text('Login with Phone', style: TextStyle(color: Colors.white)),
-                    ],
-                  ),
+              // Social Buttons reused from Login screen design
+              Container(
+                width: double.infinity,
+                height: 45,
+                decoration: BoxDecoration(color: const Color(0xFF1E272C), borderRadius: BorderRadius.circular(25)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.phone, color: Colors.white, size: 18),
+                    SizedBox(width: 10),
+                    Text('Login with Phone', style: TextStyle(color: Colors.white)),
+                  ],
                 ),
               ),
               const SizedBox(height: 12),
-
-              // Login with Google (Email) Button
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(
-                      builder: (context) => const EmailScreen()));
-                },
-                child: Container(
-                  width: double.infinity,
-                  height: 45,
-                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(25)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.g_mobiledata, color: Colors.red, size: 30),
-                      SizedBox(width: 5),
-                      Text('Login with Google', style: TextStyle(color: Colors.black)),
-                    ],
-                  ),
+              Container(
+                width: double.infinity,
+                height: 45,
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(25)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.g_mobiledata, color: Colors.red, size: 30),
+                    SizedBox(width: 5),
+                    Text('Login with Google', style: TextStyle(color: Colors.black)),
+                  ],
                 ),
               ),
               const SizedBox(height: 20),
@@ -189,22 +210,40 @@ class _RegisterscreenState extends State<Registerscreen> {
                 width: double.infinity,
                 height: 50,
                 child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isFormValid? const Color(0xFF7848B6) : const Color(0xFF7848B6).withOpacity(0.2),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                      elevation: _isFormValid ? 2:0,
-                    ),
-                    onPressed: _isFormValid? () {
-                      print("Register clicked!");
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) => const NameInputScreen()),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: _isFormValid? const Color(0xFF7848B6) : const Color(0xFF7848B6).withOpacity(0.2),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                    elevation: _isFormValid ? 2:0,
+                  ),
+                  onPressed: _isFormValid
+                      ? () {
+                    if (_passwordController.text != _confirmController.text) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Passwords do not match"),
+                        ),
                       );
+                      return;
                     }
-                        : null,
-                    child: Text('Register',style: TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold,
-                      color: _isFormValid? Colors.white : Colors.white30,
-                    ),)
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Registration Successful"),
+                      ),
+                    );
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PersonalSetup(),
+                      ),
+                    );
+                  }
+                      : null,
+                  child: Text('Register', style:  TextStyle(
+                    fontSize: 16,fontWeight: FontWeight.bold, color: _isFormValid? Colors.white : Colors.white30,
+                  ),
+                  ),
                 ),
               ),
             ],
@@ -226,14 +265,18 @@ class _RegisterscreenState extends State<Registerscreen> {
     );
   }
 
-  static Widget _buildTextField(
-      {required TextEditingController controller,
-        required String hintText,
-        bool isPassword = false,
-      }) {
+  static Widget _buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    bool isPassword = false,
+    TextInputType keyboardType = TextInputType.text,
+    List<TextInputFormatter>? inputFormatters,
+  }) {
     return TextField(
       controller: controller,
       obscureText: isPassword,
+      keyboardType: keyboardType,
+      inputFormatters: inputFormatters,
       style: TextStyle(color: Colors.black),
       decoration: InputDecoration(
         hintText: hintText,

@@ -74,6 +74,15 @@ flutter:
      - images/profilepersonjpeg-removebg-preview.png
      - images/wave_bg.png
      - images/help_icon.png
+     - images/pics1.jpg
+     - images/pics2.jpg
+     - images/pics3.jpg
+     - images/pics4.jpg
+     - images/pics5.jpg
+     - images/pics6.jpg
+     - images/pics7.jpg
+     - images/pics8.jpg
+     - images/pics9.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

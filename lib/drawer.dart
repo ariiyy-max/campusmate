@@ -43,7 +43,7 @@ class DrawerScreen extends StatelessWidget {
     if (item == 'Personal information') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const PersonalProfileScreen()),
+        MaterialPageRoute(builder: (context) => const PersonalProfile()),
       );
     } else if (item == 'Help Center') {
       Navigator.push(

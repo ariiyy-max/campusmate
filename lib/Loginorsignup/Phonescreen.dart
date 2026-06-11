@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'Registerscreen.dart';
-import 'Signupscreen.dart';
 
-class EmailScreen extends StatelessWidget {
-  const EmailScreen({super.key});
+class Phonescreen extends StatelessWidget {
+  const Phonescreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,34 +22,42 @@ class EmailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Back Button
             IconButton(
               onPressed: () => Navigator.pop(context),
               icon: const Icon(Icons.arrow_back, color: Colors.white),
             ),
             const SizedBox(height: 40),
 
-            // Title
             const Center(
               child: Text(
-                'Email',
-                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                'Phone Number',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 8),
             const Center(
               child: Text(
-                'Get login with your email',
+                'We\'ll need your phone number to send an OTP for verification.',
                 style: TextStyle(color: Colors.white70, fontSize: 13),
+                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 32),
 
-            // Email Input
+            // Phone Input
             TextField(
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.g_mobiledata, color: Colors.white),
-                hintText: 'Enter your email',
+                prefixIcon: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const SizedBox(width: 8),
+                    const Text('🇺🇸 +1', style: TextStyle(color: Colors.white)),
+                    const SizedBox(width: 4),
+                    Container(width: 1, height: 20, color: Colors.white30),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+                hintText: 'Enter phone number',
                 filled: true,
                 fillColor: Colors.white.withOpacity(0.1),
                 border: OutlineInputBorder(
@@ -60,7 +66,7 @@ class EmailScreen extends StatelessWidget {
                 ),
               ),
               style: const TextStyle(color: Colors.white),
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.phone,
             ),
             const SizedBox(height: 24),
 
@@ -72,7 +78,8 @@ class EmailScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF5A2DE5),
                   padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
                 child: const Text('Continue', style: TextStyle(fontSize: 16)),
               ),

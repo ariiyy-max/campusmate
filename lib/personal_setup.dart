@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:campusmate/compatibility_quiz.dart';
 
 void main() {
-  runApp(const PersonalSetup());
+  runApp(const MyApp());
 }
 
-class PersonalSetup extends StatelessWidget {
-  const PersonalSetup({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

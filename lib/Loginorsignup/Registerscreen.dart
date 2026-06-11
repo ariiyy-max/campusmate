@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:campusmate/personal_setup.dart';
 import 'package:campusmate/Loginorsignup/Phonescreen.dart';
 import 'package:campusmate/Loginorsignup/Emailscreen.dart';
-import 'package:campusmate/main_navigation.dart';
 
 class Registerscreen extends StatefulWidget {
   const Registerscreen({super.key});
@@ -21,23 +20,24 @@ class _RegisterscreenState extends State<Registerscreen> {
   @override
   void initState() {
     super.initState();
+    // Tambah listener
     _nameController.addListener(_validateForm);
     _emailController.addListener(_validateForm);
     _passwordController.addListener(_validateForm);
     _confirmController.addListener(_validateForm);
   }
-
   void _validateForm() {
     setState(() {
+      // Pastikan semua 4 kotak ada isi
       _isFormValid = _nameController.text.trim().isNotEmpty &&
           _emailController.text.trim().isNotEmpty &&
           _passwordController.text.trim().isNotEmpty &&
           _confirmController.text.trim().isNotEmpty;
     });
   }
-
   @override
   void dispose() {
+    // Jangan lupa dispose semua
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
@@ -56,9 +56,9 @@ class _RegisterscreenState extends State<Registerscreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors:[
-              Color(0xFF090A21),
-              Color(0xFF26084D),
-              Color(0xFF75056B),
+              Color(0xFF090A21), // Dark top
+              Color(0xFF26084D), // Deep purple mid
+              Color(0xFF75056B), // Magenta bottom
             ],
           ),
         ),
@@ -80,6 +80,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 30),
 
+              // Full Name
               _buildLabel('Your Full Name'),
               _buildTextField(
                 controller: _nameController,
@@ -87,6 +88,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 12),
 
+              // Email
               _buildLabel('Email'),
               _buildTextField(
                 controller: _emailController,
@@ -94,6 +96,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 12),
 
+              // Password
               _buildLabel('Password'),
               _buildTextField(
                 controller: _passwordController,
@@ -102,14 +105,16 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 12),
 
-              _buildLabel('Confirm Password'),
+              // Confirm Password
+              _buildLabel('Password'),
               _buildTextField(
                   controller: _confirmController,
-                  hintText: 'Confirm Password',
+                  hintText: 'confirmpassword',
                   isPassword: true
               ),
               const SizedBox(height: 20),
 
+              // Or Login With Divider
               Row(
                 children: const [
                   Expanded(child: Divider(color: Colors.white30)),
@@ -122,6 +127,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 16),
 
+              // Login with Phone Button
               GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
@@ -143,6 +149,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 12),
 
+              // Login with Google (Email) Button
               GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(
@@ -164,6 +171,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 20),
 
+              // Already have an account text
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -176,6 +184,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 25),
 
+              // Register Button
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -187,8 +196,8 @@ class _RegisterscreenState extends State<Registerscreen> {
                     ),
                     onPressed: _isFormValid? () {
                       print("Register clicked!");
-                      Navigator.pushReplacement(context, MaterialPageRoute(
-                          builder: (context) => const MainNavigationScreen()),
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => const NameInputScreen()),
                       );
                     }
                         : null,
@@ -204,7 +213,6 @@ class _RegisterscreenState extends State<Registerscreen> {
       ),
     );
   }
-
   Widget _buildLabel(String text) {
     return Align(
       alignment: Alignment.centerLeft,

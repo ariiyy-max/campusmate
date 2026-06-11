@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
-class PersonalProfileScreen extends StatefulWidget {
-  const PersonalProfileScreen({Key? key}) : super(key: key);
+class RoomateProfilleScreen extends StatefulWidget {
+  const RoomateProfilleScreen({Key? key}) : super(key: key);
 
   @override
-  State<PersonalProfileScreen> createState() => _PersonalProfileScreenState();
+  State<RoomateProfilleScreen> createState() => _RoomateProfilleScreenState();
 }
 
-class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
+class _RoomateProfilleScreenState extends State<RoomateProfilleScreen> {
   bool _isAvatarExpanded = false;
 
   @override
@@ -92,8 +94,8 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                     decoration: BoxDecoration(
                       color: const Color(0xFF1E1E1E),
                       borderRadius: BorderRadius.circular(32),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/avatar.png'), // Replace with your image
+                      image:  DecorationImage(
+                        image: AssetImage ('images/profilepersonjpeg-removebg-preview.png'), // Replace with your image
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -120,7 +122,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 image: const DecorationImage(
-                  image: AssetImage('assets/banner.png'), // Replace with your image
+                  image: AssetImage('images/backdrawer.jpeg'), // Replace with your image
                   fit: BoxFit.cover,
                 ),
               ),
@@ -142,7 +144,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       child: const CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.white,
-                        backgroundImage: AssetImage('assets/avatar.png'), // Replace with your image
+                        backgroundImage: AssetImage('images/profilepersonjpeg-removebg-preview.png'), // Replace with your image
                       ),
                     ),
                     // Edit Icon
@@ -164,11 +166,11 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
 
         // Name and Handles
         const Text(
-          'Maya',
+          'Silvia',
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         ),
         const Text(
-          'Dump | IT',
+          'Photographer | Business',
           style: TextStyle(fontSize: 14, color: Colors.grey),
         ),
         const SizedBox(height: 16),
@@ -198,8 +200,8 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
   Widget _buildProfileInfoList() {
     // Mock data based on your UI cards
     final infoItems = [
-      {'title': 'Course', 'value': 'Diploma Information Technology'},
-      {'title': 'Birthday Date', 'value': '25 / 12 / 2007'},
+      {'title': 'Course', 'value': 'Diploma Business'},
+      {'title': 'Birthday Date', 'value': '17 / 11 / 2007'},
       {'title': 'Sleep Schedule', 'value': 'Night owl'},
       {'title': 'Noise level at night', 'value': 'I\'m the one who making noise'},
       {'title': 'Smoking level', 'value': 'Non-smoker'},

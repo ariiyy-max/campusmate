@@ -2,11 +2,6 @@ import 'package:campusmate/homescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:permission_handler/permission_handler.dart'; //
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart'as path;
-
-// ---------------- FIFTH SCREEN: YOUR BIRTHDAY ----------------
 
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({super.key});
@@ -504,8 +499,7 @@ class _NoiseLevelScreenState extends State<NoiseLevelScreen> {
                   child: const Text("Don't mind background noise", style: TextStyle(fontSize: 16, color: Colors.black87)),
                 ),
               ),
-              const
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               // Option 3
               SizedBox(
@@ -1542,7 +1536,7 @@ class _RoommateBorrowScreenState extends State<RoommateBorrowScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.658,
+                      width: MediaQuery.of(context).size.width * 0.97,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -1682,7 +1676,7 @@ class _StudyVibeScreenState extends State<StudyVibeScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.705,
+                      width: MediaQuery.of(context).size.width * 1.0,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -1840,7 +1834,7 @@ class _TimeInRoomScreenState extends State<TimeInRoomScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.752,
+                      width: MediaQuery.of(context).size.width * 1.0,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -1966,6 +1960,9 @@ class _TimeInRoomScreenState extends State<TimeInRoomScreen> {
 }
 
 // ---------------- 17. UPLOAD PROFILE PICTURE ----------------
+// Add this import at the very TOP of your file:
+// import 'package:image_picker/image_picker.dart';
+// import 'dart:io';
 
 class ProfilePictureScreen extends StatefulWidget {
   const ProfilePictureScreen({super.key});
@@ -1978,53 +1975,22 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
 
-  // ✅ CHECK & REQUEST PERMISSION BEFORE PICKING
-  Future<bool> _requestPermission(Permission permission) async {
-    final status = await permission.request();
-    return status.isGranted;
-  }
-
-  // ✅ FUNCTION TO PICK PHOTO — WITH PERMISSION CHECK
+  // ✅ FUNCTION TO PICK PHOTO
   Future<void> _pickFromGallery() async {
-    // ✅ USE permission_handler HERE
-    bool granted = await _requestPermission(Permission.photos);
-    if (!granted) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Gallery permission denied")),
-        );
-      }
-      return;
-    }
-
     final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
+      source: ImageSource.gallery, // open phone gallery
+      imageQuality: 80, // reduce size a bit
       maxWidth: 500,
     );
     if (image != null) {
       setState(() {
-        _selectedImage = File(image.path);
+        _selectedImage = File(image.path); // save image
       });
-
-      // ✅ USE path & path_provider HERE — EXAMPLE SAVE PATH
-      _saveImagePathLocally(image.path);
     }
   }
 
-  // ✅ OPTIONAL: TAKE PHOTO WITH CAMERA — WITH PERMISSION CHECK
+  // ✅ OPTIONAL: TAKE PHOTO WITH CAMERA
   Future<void> _takePhoto() async {
-    // ✅ USE permission_handler HERE
-    bool granted = await _requestPermission(Permission.camera);
-    if (!granted) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Camera permission denied")),
-        );
-      }
-      return;
-    }
-
     final XFile? photo = await _picker.pickImage(
       source: ImageSource.camera,
       imageQuality: 80,
@@ -2034,26 +2000,7 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
       setState(() {
         _selectedImage = File(photo.path);
       });
-
-      // ✅ USE path & path_provider HERE
-      _saveImagePathLocally(photo.path);
     }
-  }
-
-  // ✅ THIS FUNCTION USES BOTH path & path_provider
-  Future<void> _saveImagePathLocally(String originalPath) async {
-    // Get app's storage folder
-    final Directory appDir = await getApplicationDocumentsDirectory();
-    // Get file name only
-    final String fileName = path.basename(originalPath);
-    // Create new full path
-    final String newPath = path.join(appDir.path, fileName);
-
-    debugPrint("Original path: $originalPath");
-    debugPrint("Saved path: $newPath");
-
-    // You can copy file to newPath if you want permanent save
-    // File(originalPath).copy(newPath);
   }
 
   @override
@@ -2078,7 +2025,7 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.799,
+                      width: MediaQuery.of(context).size.width * 1.0,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -2121,12 +2068,9 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
               // ✅ UPLOAD BOX — CLICKABLE
               Center(
                 child: GestureDetector(
-                  onTap: () async {
-                    await _pickFromGallery();
-                  },
-                  onLongPress: () async {
-                    await _takePhoto();
-                  },
+                  onTap: _pickFromGallery, // CLICK → OPEN GALLERY
+                  // OPTIONAL: LONG PRESS TO OPEN CAMERA
+                  onLongPress: _takePhoto,
                   child: Container(
                     width: 160,
                     height: 160,
@@ -2139,7 +2083,7 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                       borderRadius: BorderRadius.circular(15),
                       child: Image.file(
                         _selectedImage!,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.cover, // fill nicely
                         width: 160,
                         height: 160,
                       ),
@@ -2170,21 +2114,18 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _selectedImage == null
-                      ? null
+                      ? null // disabled
                       : () {
+                    // ✅ FINISH / GO TO NEXT PAGE
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("Profile picture saved!")),
                     );
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const HomeScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5A2E91),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                     elevation: 0,
                     disabledBackgroundColor: const Color(0xFFB4A7C9),
                   ),
@@ -2213,4 +2154,3 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
     );
   }
 }
-

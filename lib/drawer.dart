@@ -1,4 +1,4 @@
-import 'package:campusmate/homescreen.dart';
+import 'package:campusmate/drawer%20content/personal_info.dart';
 import 'package:campusmate/personal_profile.dart';
 import 'package:flutter/material.dart';
 import 'loginorsignup/Signupscreen.dart';
@@ -44,7 +44,7 @@ class DrawerScreen extends StatelessWidget {
     if (item == 'Personal information') {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const PersonalProfileScreen()),
+        MaterialPageRoute(builder: (context) => const EditProfile()),
       );
     } else if (item == 'Help Center') {
       Navigator.push(
@@ -210,7 +210,7 @@ class _DrawerBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = [
       _MenuItem(icon: Icons.person_outline, label: 'Personal information'),
-      _MenuItem(icon: Icons.help_outline, label: 'Help center'),
+      _MenuItem(icon: Icons.help_outline, label: 'Help Center'),
       _MenuItem(icon: Icons.chat_bubble_outline, label: 'F.A.Q'),
       _MenuItem(icon: Icons.settings_outlined, label: 'Settings'),
     ];

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'drawer.dart';  // ← ADD THIS IMPORT
 
 class PersonalProfileScreen extends StatefulWidget {
   const PersonalProfileScreen({Key? key}) : super(key: key);
@@ -9,10 +10,13 @@ class PersonalProfileScreen extends StatefulWidget {
 
 class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
   bool _isAvatarExpanded = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: const DrawerScreen(),  // Now it works because we imported drawer.dart
       body: Stack(
         children: [
           // Main Scrollable Content
@@ -27,7 +31,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
             child: SafeArea(
               child: Column(
                 children: [
-                  // Custom AppBar
+                  // Custom AppBar with Menu Icon
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     child: Row(
@@ -35,14 +39,13 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                         IconButton(
                           icon: const Icon(Icons.menu, color: Colors.white),
                           onPressed: () {
-                            // You can open drawer here if needed
+                            _scaffoldKey.currentState?.openDrawer();
                           },
                         ),
                         const Spacer(),
                         IconButton(
                           icon: const Icon(Icons.edit, color: Colors.white),
                           onPressed: () {
-                            // Edit profile functionality
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Edit profile coming soon!')),
                             );
@@ -93,7 +96,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       color: const Color(0xFF1E1E1E),
                       borderRadius: BorderRadius.circular(32),
                       image: const DecorationImage(
-                        image: AssetImage('assets/avatar.png'), // Replace with your image
+                        image: AssetImage('assets/avatar.png'),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -103,7 +106,6 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
             ),
         ],
       ),
-      // REMOVED bottomNavigationBar - now handled by main.dart
     );
   }
 
@@ -120,7 +122,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 image: const DecorationImage(
-                  image: AssetImage('assets/banner.png'), // Replace with your image
+                  image: AssetImage('assets/banner.png'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -142,7 +144,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       child: const CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.white,
-                        backgroundImage: AssetImage('assets/avatar.png'), // Replace with your image
+                        backgroundImage: AssetImage('assets/avatar.png'),
                       ),
                     ),
                     // Edit Icon
@@ -196,7 +198,6 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
   }
 
   Widget _buildProfileInfoList() {
-    // Mock data based on your UI cards
     final infoItems = [
       {'title': 'Course', 'value': 'Diploma Information Technology'},
       {'title': 'Birthday Date', 'value': '25 / 12 / 2007'},
@@ -223,7 +224,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
   }
 }
 
-//info card
+// Info Card Widget
 class ProfileInfoCard extends StatelessWidget {
   final String title;
   final String value;

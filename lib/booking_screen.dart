@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'services/chat_manager.dart';
+import 'models/chat_user_model.dart';
+import 'homescreen.dart';
 
 class BookingScreen extends StatefulWidget {
   const BookingScreen({super.key});
@@ -10,12 +13,12 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen> {
   String? selectedRoomType; // '2' or '4'
   String? selectedRoomNumber;
+  final ChatManager _chatManager = ChatManager();
 
   // Rooms for 2 people
   final List<Map<String, dynamic>> roomsFor2 = [
     {
       'roomNumber': 'AGO-01',
-      'price': 'RM 450',
       'facilities': ['2 double decker', '4 locker', '4 table'],
       'occupants': [
         {'name': 'Sophia', 'age': 22, 'major': 'Computer Science', 'bio': 'Quiet and tidy person, loves reading', 'image': 'assets/avatar1.png'},
@@ -24,7 +27,6 @@ class _BookingScreenState extends State<BookingScreen> {
     },
     {
       'roomNumber': 'AGO-02',
-      'price': 'RM 480',
       'facilities': ['2 double decker', '4 locker', '4 table', 'AC'],
       'occupants': [
         {'name': 'Lisa', 'age': 23, 'major': 'Psychology', 'bio': 'Night owl, loves music', 'image': 'assets/avatar3.png'},
@@ -33,7 +35,6 @@ class _BookingScreenState extends State<BookingScreen> {
     },
     {
       'roomNumber': 'AGO-03',
-      'price': 'RM 420',
       'facilities': ['2 double decker', '4 locker', '4 table'],
       'occupants': [
         {'name': 'Maya', 'age': 20, 'major': 'Engineering', 'bio': 'Hardworking, loves gym', 'image': 'assets/avatar1.png'},
@@ -46,7 +47,6 @@ class _BookingScreenState extends State<BookingScreen> {
   final List<Map<String, dynamic>> roomsFor4 = [
     {
       'roomNumber': 'AGO-05',
-      'price': 'RM 350',
       'facilities': ['2 double decker', '4 locker', '4 table'],
       'occupants': [
         {'name': 'Mia', 'age': 22, 'major': 'IT', 'bio': 'Tech enthusiast', 'image': 'assets/avatar1.png'},
@@ -57,7 +57,6 @@ class _BookingScreenState extends State<BookingScreen> {
     },
     {
       'roomNumber': 'AGO-06',
-      'price': 'RM 320',
       'facilities': ['2 double decker', '4 locker', '4 table', 'Water heater'],
       'occupants': [
         {'name': 'Zoe', 'age': 22, 'major': 'Psychology', 'bio': 'Good listener', 'image': 'assets/avatar1.png'},
@@ -263,33 +262,13 @@ class _BookingScreenState extends State<BookingScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                room['roomNumber'],
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF8A4FFF),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  room['price'],
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
+                          Text(
+                            room['roomNumber'],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(height: 12),
                           const Text(
@@ -376,8 +355,9 @@ class _BookingScreenState extends State<BookingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Room Details Card
+              // Room Details Card - FIXED: Same size for all rooms
               Container(
+                width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: const Color(0xFF1D1B4E),
@@ -386,33 +366,13 @@ class _BookingScreenState extends State<BookingScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          room['roomNumber'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF8A4FFF),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            room['price'],
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
+                    Text(
+                      room['roomNumber'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
 
@@ -452,6 +412,7 @@ class _BookingScreenState extends State<BookingScreen> {
               ),
               const SizedBox(height: 12),
 
+              // Fixed: Each occupant card has consistent height
               ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -617,7 +578,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pop(dialogContext);
-                    _showSendMessageDialog(context, occupant['name']);
+                    _sendMessageToOccupant(context, occupant);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF8A4FFF),
@@ -635,7 +596,7 @@ class _BookingScreenState extends State<BookingScreen> {
     );
   }
 
-  void _showSendMessageDialog(BuildContext context, String name) {
+  void _sendMessageToOccupant(BuildContext context, Map<String, dynamic> occupant) {
     final TextEditingController messageController = TextEditingController();
 
     showDialog(
@@ -657,7 +618,7 @@ class _BookingScreenState extends State<BookingScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Send message to $name',
+                'Send message to ${occupant['name']}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
@@ -702,13 +663,29 @@ class _BookingScreenState extends State<BookingScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (messageController.text.isNotEmpty) {
+                          final matchedUser = UserProfile(
+                            name: occupant['name'],
+                            age: occupant['age'],
+                            major: occupant['major'],
+                            assetPath: occupant['image'],
+                          );
+
+                          _chatManager.createMatch(matchedUser);
+                          _chatManager.sendMessage(
+                            _chatManager.getChatByUserName(occupant['name'])?.id ?? occupant['name'],
+                            messageController.text,
+                          );
+
                           Navigator.pop(dialogContext);
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text('Message sent to $name!'),
+                              content: Text('Message sent to ${occupant['name']}!'),
                               backgroundColor: const Color(0xFF8A4FFF),
                             ),
                           );
+
+                          Navigator.pushNamed(context, '/main-nav');
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -758,7 +735,6 @@ class _BookingScreenState extends State<BookingScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              // Go back to room selection
               setState(() {
                 selectedRoomNumber = null;
                 selectedRoomType = null;

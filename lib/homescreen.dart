@@ -1,6 +1,5 @@
 import 'package:campusmate/drawer.dart';
 import 'package:flutter/material.dart';
-import 'loginorsignup/Signupscreen.dart';
 import 'filter_screen.dart';
 import 'send_request_dialog.dart';
 
@@ -33,7 +32,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
   bool isFindMatchSelected = true;
 
   // Search controller
@@ -508,28 +506,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF0A0724),
-        selectedItemColor: const Color(0xFF8A4FFF),
-        unselectedItemColor: Colors.white38,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: "Booking"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
-            label: "Notification",
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: "Chat"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
       ),
     );
   }

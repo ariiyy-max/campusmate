@@ -1,12 +1,7 @@
 import 'package:campusmate/homescreen.dart';
-import 'package:campusmate/personal_setup.dart';
-import 'package:campusmate/personal_profile.dart'; // Add this import
+import 'package:campusmate/personal_profile.dart';
 import 'package:flutter/material.dart';
 import 'loginorsignup/Signupscreen.dart';
-
-void main() {
-  runApp(const DrawerScreen());
-}
 
 class DrawerScreen extends StatelessWidget {
   const DrawerScreen({super.key});
@@ -166,99 +161,6 @@ class _DrawerHeader extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-// app drawer
-class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      width: MediaQuery.of(context).size.width * 0.78,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        ),
-      ),
-      child: Column(
-        children: [
-          const _DrawerHeader(), // ✅ Your image header here
-          Expanded(
-            child: _DrawerBody(
-              onItemTap: (item) {
-                Navigator.pop(context); // Close drawer first
-                _navigateToPage(context, item); // Go to correct page
-              },
-              onLogout: () {
-                Navigator.pop(context);
-                _onLogout(context);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ✅ UPDATED: Connect text to PersonalProfileScreen
-  void _navigateToPage(BuildContext context, String item) {
-    switch (item) {
-      case 'Personal information':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const PersonalProfileScreen()),
-        );
-        break;
-      case 'Help center':
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Help center coming soon!')),
-        );
-        break;
-      case 'F.A.Q':
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('F.A.Q coming soon!')),
-        );
-        break;
-      case 'Settings':
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Settings coming soon!')),
-        );
-        break;
-      default:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-    }
-  }
-
-  void _onLogout(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const Signupscreen()),
-              );
-            },
-            child: const Text('Logout', style: TextStyle(color: Color(0xFF7848B6))),
-          ),
-        ],
-      ),
     );
   }
 }

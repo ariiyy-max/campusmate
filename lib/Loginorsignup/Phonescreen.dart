@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'Registerscreen.dart';
-import 'Signupscreen.dart';
 
 class Phonescreen extends StatelessWidget {
   const Phonescreen({super.key});
@@ -92,4 +90,3 @@ class Phonescreen extends StatelessWidget {
     );
   }
 }
-

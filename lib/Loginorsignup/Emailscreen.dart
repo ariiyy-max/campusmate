@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'Registerscreen.dart';
-import 'Signupscreen.dart';
 
 class EmailScreen extends StatelessWidget {
   const EmailScreen({super.key});

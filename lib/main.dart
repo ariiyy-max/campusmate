@@ -1,4 +1,3 @@
-import 'package:campusmate/Loginorsignup/Registerscreen.dart';
 import 'package:flutter/material.dart';
 import 'Loginorsignup/Signupscreen.dart';
 import 'homescreen.dart';
@@ -6,6 +5,7 @@ import 'chat.dart';
 import 'personal_profile.dart';
 import 'booking_screen.dart';
 import 'notification_screen.dart';
+import 'Loginorsignup/Registerscreen.dart';
 
 void main() {
   runApp(const MyApp());

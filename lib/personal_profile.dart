@@ -105,19 +105,7 @@ class _PersonalProfileState extends State<PersonalProfile> {
                         IconButton(
                           icon: const Icon(Icons.edit, color: Colors.white),
                           onPressed: () async {
-                            // ✅ OPEN QUIZ AND WAIT FOR RESULT
-                            final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const CompatibilityQuizScreen(),
-                              ),
-                            );
-
-                            // ✅ UPDATE PROFILE IF DATA RECEIVED
-                            if (result is UserProfileAbout) {
-                              updateProfileData(result);
                             }
-                          },
                         ),
                       ],
                     ),

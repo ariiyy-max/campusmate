@@ -1,75 +1,8 @@
-import 'package:campusmate/personal_profile.dart'; // ✅ HAS UserProfileAbout
+import 'package:campusmate/homescreen.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
 
-class CompatibilityQuizScreen extends StatefulWidget {
-  const CompatibilityQuizScreen({super.key});
-
-  @override
-  State<CompatibilityQuizScreen> createState() => _CompatibilityQuizScreenState();
-}
-
-class _CompatibilityQuizScreenState extends State<CompatibilityQuizScreen> {
-  // ✅ ALL THESE VARIABLES WILL BE USED NOW
-  String _course = '';
-  String _birthday = '';
-  String _sleepSchedule = '';
-  String _noiseLevel = '';
-  String _smoking = '';
-  String _alcohol = '';
-  String? _savedImagePath;
-
-  void saveBirthdayAndNext(String birthday, BuildContext context) {
-    setState(() {
-      _birthday = birthday; // ✅ SAVE TO YOUR VARIABLE (no more unused!)
-    });
-    // Go to next screen
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const GenderScreen()), // change to your next screen
-    );
-  }
-
-  // ✅ SAVE EACH ANSWER
-  void saveCourse(String value) => setState(() => _course = value);
-
-  void saveBirthday(String value) => setState(() => _birthday = value);
-
-  void saveSleep(String value) => setState(() => _sleepSchedule = value);
-
-  void saveNoise(String value) => setState(() => _noiseLevel = value);
-
-  void saveSmoking(String value) => setState(() => _smoking = value);
-
-  void saveAlcohol(String value) => setState(() => _alcohol = value);
-
-  // ✅ FINAL: SAVE EVERYTHING & GO BACK
-  void finishQuiz() {
-    final result = UserProfileAbout(
-      course: _course,
-      birthday: _birthday,
-      sleepSchedule: _sleepSchedule,
-      noiseLevel: _noiseLevel,
-      smoking: _smoking,
-      alcohol: _alcohol,
-      profileImagePath: _savedImagePath,
-    );
-    Navigator.pop(context, result); // ✅ SEND BACK TO PROFILE
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: const BirthdayScreen(), // Start with first screen
-    );
-  }
-}
-
-// ---------------- FIFTH SCREEN: YOUR BIRTHDAY ----------------
 class BirthdayScreen extends StatefulWidget {
   const BirthdayScreen({super.key});
 
@@ -99,7 +32,7 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
     // Month 1-12 only
     if (month < 1 || month > 12) return false;
 
-    // Year range
+    // Year max 2026
     if (year < 1900 || year > 2026) return false;
 
     // Days per month
@@ -294,14 +227,10 @@ class _BirthdayScreenState extends State<BirthdayScreen> {
                   child: ElevatedButton(
                     onPressed: _isValidDate()
                         ? () {
-                      // Format and save birthday
-                      final birthday = "${_dayController.text.padLeft(2, '0')}/"
-                          "${_monthController.text.padLeft(2, '0')}/"
-                          "${_yearController.text}";
-
-                      // Pass data back to main quiz screen or save
-                      final parentState = context.findAncestorStateOfType<_CompatibilityQuizScreenState>();
-                      parentState?.saveBirthdayAndNext(birthday, context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const GenderScreen()),
+                      );
                     }
                         : null,
                     style: ElevatedButton.styleFrom(
@@ -570,8 +499,7 @@ class _NoiseLevelScreenState extends State<NoiseLevelScreen> {
                   child: const Text("Don't mind background noise", style: TextStyle(fontSize: 16, color: Colors.black87)),
                 ),
               ),
-              const
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               // Option 3
               SizedBox(
@@ -1608,7 +1536,7 @@ class _RoommateBorrowScreenState extends State<RoommateBorrowScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.658,
+                      width: MediaQuery.of(context).size.width * 0.97,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -1748,7 +1676,7 @@ class _StudyVibeScreenState extends State<StudyVibeScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.705,
+                      width: MediaQuery.of(context).size.width * 1.0,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -1906,7 +1834,7 @@ class _TimeInRoomScreenState extends State<TimeInRoomScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.752,
+                      width: MediaQuery.of(context).size.width * 1.0,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -2003,7 +1931,7 @@ class _TimeInRoomScreenState extends State<TimeInRoomScreen> {
                       : () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const PersonalProfile()),
+                      MaterialPageRoute(builder: (context) => const ProfilePictureScreen()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -2031,14 +1959,13 @@ class _TimeInRoomScreenState extends State<TimeInRoomScreen> {
   }
 }
 
-class ProfilePictureScreen extends StatefulWidget {
-  // ✅ RECEIVE existing data from previous screens
-  final UserProfileAbout existingData;
+// ---------------- 17. UPLOAD PROFILE PICTURE ----------------
+// Add this import at the very TOP of your file:
+// import 'package:image_picker/image_picker.dart';
+// import 'dart:io';
 
-  const ProfilePictureScreen({
-    super.key,
-    required this.existingData,
-  });
+class ProfilePictureScreen extends StatefulWidget {
+  const ProfilePictureScreen({super.key});
 
   @override
   State<ProfilePictureScreen> createState() => _ProfilePictureScreenState();
@@ -2047,51 +1974,23 @@ class ProfilePictureScreen extends StatefulWidget {
 class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
-  String? _savedImagePath; // ✅ store saved path
 
-  // ✅ CHECK & REQUEST PERMISSION BEFORE PICKING
-  Future<bool> _requestPermission(Permission permission) async {
-    final status = await permission.request();
-    return status.isGranted;
-  }
-
-  // ✅ FUNCTION TO PICK PHOTO — WITH PERMISSION CHECK
+  // ✅ FUNCTION TO PICK PHOTO
   Future<void> _pickFromGallery() async {
-    bool granted = await _requestPermission(Permission.photos);
-    if (!granted) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Gallery permission denied")),
-        );
-      }
-      return;
-    }
-
     final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
+      source: ImageSource.gallery, // open phone gallery
+      imageQuality: 80, // reduce size a bit
       maxWidth: 500,
     );
     if (image != null) {
       setState(() {
-        _selectedImage = File(image.path);
+        _selectedImage = File(image.path); // save image
       });
-      await _saveImagePathLocally(image.path);
     }
   }
 
-  // ✅ OPTIONAL: TAKE PHOTO WITH CAMERA — WITH PERMISSION CHECK
+  // ✅ OPTIONAL: TAKE PHOTO WITH CAMERA
   Future<void> _takePhoto() async {
-    bool granted = await _requestPermission(Permission.camera);
-    if (!granted) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Camera permission denied")),
-        );
-      }
-      return;
-    }
-
     final XFile? photo = await _picker.pickImage(
       source: ImageSource.camera,
       imageQuality: 80,
@@ -2101,28 +2000,6 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
       setState(() {
         _selectedImage = File(photo.path);
       });
-      await _saveImagePathLocally(photo.path);
-    }
-  }
-
-  // ✅ THIS FUNCTION USES BOTH path & path_provider
-  Future<void> _saveImagePathLocally(String originalPath) async {
-    try {
-      // Get app's storage folder
-      final Directory appDir = await getApplicationDocumentsDirectory();
-      // Get file name only
-      final String fileName = path.basename(originalPath);
-      // Create new full path
-      final String newPath = path.join(appDir.path, fileName);
-
-      // ✅ Copy file to permanent storage
-      await File(originalPath).copy(newPath);
-      _savedImagePath = newPath;
-
-      debugPrint("Original path: $originalPath");
-      debugPrint("Saved path: $newPath");
-    } catch (e) {
-      debugPrint("Error saving image: $e");
     }
   }
 
@@ -2148,7 +2025,7 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                       color: const Color(0xFFE8E0F5),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.799,
+                      width: MediaQuery.of(context).size.width * 1.0,
                       height: 3.0,
                       color: const Color(0xFF5A2E91),
                     ),
@@ -2191,7 +2068,8 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
               // ✅ UPLOAD BOX — CLICKABLE
               Center(
                 child: GestureDetector(
-                  onTap: _pickFromGallery,
+                  onTap: _pickFromGallery, // CLICK → OPEN GALLERY
+                  // OPTIONAL: LONG PRESS TO OPEN CAMERA
                   onLongPress: _takePhoto,
                   child: Container(
                     width: 160,
@@ -2205,7 +2083,7 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                       borderRadius: BorderRadius.circular(15),
                       child: Image.file(
                         _selectedImage!,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.cover, // fill nicely
                         width: 160,
                         height: 160,
                       ),
@@ -2236,43 +2114,39 @@ class _ProfilePictureScreenState extends State<ProfilePictureScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _selectedImage == null
-                      ? null
+                      ? null // disabled
                       : () {
-                    // ✅ Combine ALL data + image path
-                    final completeProfile = UserProfileAbout(
-                      course: widget.existingData.course,
-                      birthday: widget.existingData.birthday,
-                      sleepSchedule: widget.existingData.sleepSchedule,
-                      noiseLevel: widget.existingData.noiseLevel,
-                      smoking: widget.existingData.smoking,
-                      alcohol: widget.existingData.alcohol,
-                      profileImagePath: _savedImagePath, // ✅ NOW IT EXISTS!
-                    );
-
+                    // ✅ FINISH / GO TO NEXT PAGE
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Profile saved successfully!")),
+                      const SnackBar(content: Text("Profile picture saved!")),
                     );
-
-                    // ✅ Send FULL data BACK to previous screen
-                    Navigator.pop(context, completeProfile);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF5A2E91),
                     padding: const EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
                     elevation: 0,
-                    // ✅ FIXED: invalid color code
                     disabledBackgroundColor: const Color(0xFFB4A7C9),
                   ),
-                  child: const Text(
-                    'Save Profile',
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Next",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(width: 6),
+                      Icon(Icons.arrow_forward, color: Colors.white, size: 16),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
             ],
           ),
         ),

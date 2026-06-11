@@ -99,7 +99,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PersonalSetup(),
+                        builder: (context) => const NameInputScreen(),
                       ),
                     );
                   },
@@ -235,7 +235,7 @@ class _RegisterscreenState extends State<Registerscreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PersonalSetup(),
+                        builder: (context) => const NameInputScreen(),
                       ),
                     );
                   }

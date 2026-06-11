@@ -1,5 +1,8 @@
+import 'package:campusmate/drawer%20content/personal_info.dart';
 import 'package:campusmate/homescreen.dart';
-import 'package:campusmate/personal_setup.dart';
+import 'package:campusmate/drawer content/personal_info.dart';
+import 'package:campusmate/drawer content/help_center.dart';
+import 'package:campusmate/drawer content/faq.dart';
 import 'package:flutter/material.dart';
 
 import 'loginorsignup/Signupscreen.dart';
@@ -202,13 +205,13 @@ class AppDrawer extends StatelessWidget {
     Widget page;
     switch (item) {
       case 'Personal information':
-        page = const NameInputScreen(); // Changed from PersonalSetup to NameInputScreen
+        page = const EditProfile(); // Changed from PersonalSetup to NameInputScreen
         break;
       case 'Help center':
-        page = const HomeScreen(); //tuka home
+        page = const HelpCenter(); //tuka home
         break;
       case 'F.A.Q':
-        page = const HomeScreen(); //tuka home
+        page = const FAQScreen(); //tuka home
         break;
       case 'Settings':
         page = const HomeScreen(); //tuka home

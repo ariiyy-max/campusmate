@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:campusmate/personal_setup.dart';
+import 'package:campusmate/Loginorsignup/Phonescreen.dart';
+import 'package:campusmate/Loginorsignup/Emailscreen.dart';
 
 class Registerscreen extends StatefulWidget {
   const Registerscreen({super.key});
@@ -97,7 +99,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               // Password
               _buildLabel('Password'),
               _buildTextField(
-                controller: _passwordController, // Sediakan controller untuk baca teks
+                controller: _passwordController,
                 hintText: 'Password',
                 isPassword: true,
               ),
@@ -106,7 +108,7 @@ class _RegisterscreenState extends State<Registerscreen> {
               // Confirm Password
               _buildLabel('Password'),
               _buildTextField(
-                  controller: _confirmController, // Sediakan controller untuk baca teks
+                  controller: _confirmController,
                   hintText: 'confirmpassword',
                   isPassword: true
               ),
@@ -125,32 +127,46 @@ class _RegisterscreenState extends State<Registerscreen> {
               ),
               const SizedBox(height: 16),
 
-              // Social Buttons reused from Login screen design
-              Container(
-                width: double.infinity,
-                height: 45,
-                decoration: BoxDecoration(color: const Color(0xFF1E272C), borderRadius: BorderRadius.circular(25)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.phone, color: Colors.white, size: 18),
-                    SizedBox(width: 10),
-                    Text('Login with Phone', style: TextStyle(color: Colors.white)),
-                  ],
+              // Login with Phone Button
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => const Phonescreen()));
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(color: const Color(0xFF1E272C), borderRadius: BorderRadius.circular(25)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.phone, color: Colors.white, size: 18),
+                      SizedBox(width: 10),
+                      Text('Login with Phone', style: TextStyle(color: Colors.white)),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
-              Container(
-                width: double.infinity,
-                height: 45,
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(25)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.g_mobiledata, color: Colors.red, size: 30),
-                    SizedBox(width: 5),
-                    Text('Login with Google', style: TextStyle(color: Colors.black)),
-                  ],
+
+              // Login with Google (Email) Button
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => const EmailScreen()));
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: 45,
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(25)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.g_mobiledata, color: Colors.red, size: 30),
+                      SizedBox(width: 5),
+                      Text('Login with Google', style: TextStyle(color: Colors.black)),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

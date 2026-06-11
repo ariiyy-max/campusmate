@@ -1,8 +1,11 @@
-import 'package:campusmate/loginorsignup/Registerscreen.dart';
 import 'package:flutter/material.dart';
-import 'loginorsignup/Signupscreen.dart';
+import 'Loginorsignup/Signupscreen.dart';
 import 'homescreen.dart';
-import 'chat.dart'; // Add this import for ChatScreen
+import 'chat.dart';
+import 'personal_profile.dart';
+import 'booking_screen.dart';
+import 'notification_screen.dart';
+import 'Loginorsignup/Registerscreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -186,7 +189,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-// Main Navigation Screen with Bottom Navigation Bar (5 tabs: Home, Booking, Notification, Chats, Profile)
+// Main Navigation Screen with Bottom Navigation Bar (5 tabs)
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
@@ -195,14 +198,14 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 3; // Set to Chats index (3)
+  int _selectedIndex = 0;
 
   final List<Widget> _screens = [
     const HomeScreen(),
     const BookingScreen(),
     const NotificationScreen(),
-    const ChatScreen(), // Your chat screen - now imported from chat.dart
-    const ProfileScreen(),
+    const ChatScreen(),
+    const PersonalProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -217,9 +220,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color(0xFF0F0C31),
+        backgroundColor: const Color(0xFF0A0724),
         selectedItemColor: const Color(0xFF8A4FFF),
-        unselectedItemColor: Colors.white54,
+        unselectedItemColor: Colors.white38,
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
@@ -244,130 +247,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             label: 'Profile',
           ),
         ],
-      ),
-    );
-  }
-}
-
-// Placeholder screens
-class BookingScreen extends StatelessWidget {
-  const BookingScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F0C31),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.book_online, size: 64, color: Colors.white54),
-            const SizedBox(height: 16),
-            const Text(
-              'Booking Screen',
-              style: TextStyle(color: Colors.white, fontSize: 24),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Coming Soon',
-              style: TextStyle(color: Colors.white38, fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class NotificationScreen extends StatelessWidget {
-  const NotificationScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F0C31),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.notifications, size: 64, color: Colors.white54),
-            const SizedBox(height: 16),
-            const Text(
-              'Notifications',
-              style: TextStyle(color: Colors.white, fontSize: 24),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'No new notifications',
-              style: TextStyle(color: Colors.white38, fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0F0C31),
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CircleAvatar(
-                radius: 50,
-                backgroundColor: Color(0xFF8A4FFF),
-                child: Icon(Icons.person, size: 50, color: Colors.white),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'User Name',
-                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'user@campus.edu',
-                style: TextStyle(color: Colors.white38, fontSize: 16),
-              ),
-              const SizedBox(height: 24),
-              _buildProfileOption(Icons.settings, 'Settings', context),
-              _buildProfileOption(Icons.help, 'Help Center', context),
-              _buildProfileOption(Icons.logout, 'Logout', context, isLogout: true),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildProfileOption(IconData icon, String title, BuildContext context, {bool isLogout = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF161439),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: ListTile(
-          leading: Icon(icon, color: isLogout ? Colors.red : const Color(0xFF8A4FFF)),
-          title: Text(
-            title,
-            style: TextStyle(color: isLogout ? Colors.red : Colors.white),
-          ),
-          trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white38),
-          onTap: () {
-            if (isLogout) {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const Signupscreen()));
-            }
-          },
-        ),
       ),
     );
   }

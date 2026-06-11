@@ -31,7 +31,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color(0xFF1A1A2E), // Dark popup color matching screenshot
           borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
@@ -52,7 +52,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF0E6FF),
+                  color: const Color(0xFF2A2A3E),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -67,7 +67,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 5),
@@ -79,7 +79,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
               Text(
                 "Interested to become roommates with ${widget.userName}?",
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14, color: Colors.black54),
+                style: const TextStyle(fontSize: 14, color: Colors.white70),
               ),
               const SizedBox(height: 25),
               _buildPrimaryButton("SEND REQUEST", () {
@@ -105,7 +105,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF0E6FF),
+                  color: const Color(0xFF2A2A3E),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
@@ -120,7 +120,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 5),
@@ -135,7 +135,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 5),
@@ -190,8 +190,8 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                   Container(
                     width: 60,
                     height: 60,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFE0E0E0),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF3A3A4E),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.person, size: 35, color: Colors.grey),
@@ -200,8 +200,8 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                   Container(
                     width: 60,
                     height: 60,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFF0E6FF),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF2A2A3E),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
@@ -216,7 +216,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
               Text(
                 "${widget.userName} likes you too!",
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14, color: Colors.black54),
+                style: const TextStyle(fontSize: 14, color: Colors.white70),
               ),
               const SizedBox(height: 25),
               _buildPrimaryButton("SEND A MESSAGE", () {
@@ -245,8 +245,8 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                   Container(
                     width: 60,
                     height: 60,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFE0E0E0),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF3A3A4E),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.person, size: 35, color: Colors.grey),
@@ -255,8 +255,8 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
                   Container(
                     width: 60,
                     height: 60,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFD0D0D0),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF3A3A4E),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.person, size: 35, color: Colors.grey),
@@ -267,7 +267,7 @@ class _SendRequestDialogState extends State<SendRequestDialog> {
               const Text(
                 "It's not a match!",
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.black54),
+                style: TextStyle(fontSize: 14, color: Colors.white70),
               ),
               const SizedBox(height: 25),
               _buildSecondaryButton("KEEP SWIPING", () {

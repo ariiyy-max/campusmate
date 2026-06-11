@@ -1,329 +1,382 @@
 import 'package:flutter/material.dart';
+import 'services/chat_manager.dart';
+import 'homescreen.dart';
+import 'chat.dart';
 
-class SendRequestDialog extends StatefulWidget {
+// First Popup: Send Interest Dialog
+class SendInterestDialog extends StatelessWidget {
   final String userName;
   final String userMajor;
-  final VoidCallback onRequestSent;
-  final VoidCallback onMatch;
-  final VoidCallback onDialogClose;
+  final VoidCallback onSendRequest;
+  final VoidCallback onCancel;
 
-  const SendRequestDialog({
+  const SendInterestDialog({
     super.key,
     required this.userName,
     required this.userMajor,
-    required this.onRequestSent,
-    required this.onMatch,
-    required this.onDialogClose,
+    required this.onSendRequest,
+    required this.onCancel,
   });
-
-  @override
-  State<SendRequestDialog> createState() => _SendRequestDialogState();
-}
-
-class _SendRequestDialogState extends State<SendRequestDialog> {
-  int dialogState = 0; // 0: send interest, 1: request sent, 2: match, 3: bummer
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      backgroundColor: const Color(0xFF1D1B4E),
       child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: const Color(0xFF1A1A2E), // Dark popup color matching screenshot
-          borderRadius: BorderRadius.circular(20),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (dialogState == 0) ...[
-              const Text(
-                "Send Interest",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Color(0xFF8A4FFF),
-                  fontWeight: FontWeight.bold,
-                ),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.pink.withOpacity(0.2),
+                shape: BoxShape.circle,
               ),
-              const SizedBox(height: 20),
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2A2A3E),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.person,
-                  size: 50,
-                  color: Color(0xFF8A4FFF),
-                ),
+              child: const Icon(
+                Icons.favorite,
+                color: Colors.pink,
+                size: 48,
               ),
-              const SizedBox(height: 15),
-              Text(
-                widget.userName,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "Send Interest",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 5),
-              Text(
-                widget.userMajor,
-                style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              userName,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
               ),
-              const SizedBox(height: 20),
-              Text(
-                "Interested to become roommates with ${widget.userName}?",
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14, color: Colors.white70),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              userMajor,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
               ),
-              const SizedBox(height: 25),
-              _buildPrimaryButton("SEND REQUEST", () {
-                setState(() => dialogState = 1);
-                widget.onRequestSent();
-              }),
-              const SizedBox(height: 10),
-              _buildSecondaryButton("CANCEL", () {
-                widget.onDialogClose();
-                Navigator.pop(context);
-              }),
-            ] else if (dialogState == 1) ...[
-              const Text(
-                "Request Sent",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Color(0xFF8A4FFF),
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Interested to become roommates with $userName?",
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
               ),
-              const SizedBox(height: 20),
-              Container(
-                width: 80,
-                height: 80,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2A2A3E),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.check,
-                  size: 50,
-                  color: Color(0xFF8A4FFF),
-                ),
-              ),
-              const SizedBox(height: 15),
-              Text(
-                widget.userName,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                widget.userMajor,
-                style: const TextStyle(fontSize: 14, color: Colors.grey),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Your roommate request was sent!",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                "Wait for ${widget.userName} to accept your request.",
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12, color: Colors.grey),
-              ),
-              const SizedBox(height: 25),
-              _buildPrimaryButton("KEEP SWIPING", () {
-                // Show loading indicator
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (context) => const Center(
-                    child: CircularProgressIndicator(
-                      valueColor:
-                      AlwaysStoppedAnimation<Color>(Color(0xFF8A4FFF)),
-                    ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onSendRequest,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8A4FFF),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                );
-
-                // Simulate waiting for response (2 seconds)
-                Future.delayed(const Duration(seconds: 2), () {
-                  Navigator.pop(context); // Close loading dialog
-
-                  // Randomly decide match or bummer (50% chance)
-                  final bool isMatch = DateTime.now().millisecondsSinceEpoch % 2 == 0;
-
-                  setState(() {
-                    dialogState = isMatch ? 2 : 3;
-                  });
-
-                  if (isMatch) {
-                    widget.onMatch();
-                  }
-                });
-              }),
-            ] else if (dialogState == 2) ...[
-              const Text(
-                "It's a Match!",
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Color(0xFF8A4FFF),
-                  fontWeight: FontWeight.bold,
+                ),
+                child: const Text(
+                  "SEND REQUEST",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3A3A4E),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.person, size: 35, color: Colors.grey),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: onCancel,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white70,
+                  side: const BorderSide(color: Colors.white30),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                  const SizedBox(width: 15),
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2A2A3E),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      size: 35,
-                      color: Color(0xFF8A4FFF),
-                    ),
+                ),
+                child: const Text(
+                  "CANCEL",
+                  style: TextStyle(
+                    fontSize: 16,
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Text(
-                "${widget.userName} likes you too!",
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 14, color: Colors.white70),
-              ),
-              const SizedBox(height: 25),
-              _buildPrimaryButton("SEND A MESSAGE", () {
-                widget.onMatch();
-                Navigator.pop(context);
-              }),
-              const SizedBox(height: 10),
-              _buildSecondaryButton("KEEP SWIPING", () {
-                widget.onDialogClose();
-                Navigator.pop(context);
-              }),
-            ] else if (dialogState == 3) ...[
-              const Text(
-                "It's a Bummer",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Color(0xFF8A4FFF),
-                  fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3A3A4E),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.person, size: 35, color: Colors.grey),
-                  ),
-                  const SizedBox(width: 15),
-                  Container(
-                    width: 60,
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF3A3A4E),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.person, size: 35, color: Colors.grey),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "It's not a match!",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.white70),
-              ),
-              const SizedBox(height: 25),
-              _buildSecondaryButton("KEEP SWIPING", () {
-                widget.onDialogClose();
-                Navigator.pop(context);
-              }),
-            ]
+            ),
           ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildPrimaryButton(String text, VoidCallback onPressed) {
-    return SizedBox(
-      width: double.infinity,
-      height: 45,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF8A4FFF),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
+// Second Popup: Request Sent Dialog
+class RequestSentDialog extends StatelessWidget {
+  final String userName;
+  final String userMajor;
+  final VoidCallback onKeepSwiping;
+
+  const RequestSentDialog({
+    super.key,
+    required this.userName,
+    required this.userMajor,
+    required this.onKeepSwiping,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      backgroundColor: const Color(0xFF1D1B4E),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.green.withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+                size: 48,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "Request Sent",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              userName,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              userMajor,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Your roommate request was sent!\nWait for $userName to accept your request.",
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onKeepSwiping,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8A4FFF),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: const Text(
+                  "KEEP SWIPING",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+}
 
-  Widget _buildSecondaryButton(String text, VoidCallback onPressed) {
-    return SizedBox(
-      width: double.infinity,
-      height: 45,
-      child: OutlinedButton(
-        style: OutlinedButton.styleFrom(
-          side: const BorderSide(color: Color(0xFF8A4FFF), width: 1.5),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
+// Match Dialog (When both users like each other)
+class MatchDialog extends StatelessWidget {
+  final String userName;
+  final String userMajor;
+  final ChatManager chatManager;
+  final UserProfile matchedUser;
+  final VoidCallback onSendMessage;
+
+  const MatchDialog({
+    super.key,
+    required this.userName,
+    required this.userMajor,
+    required this.chatManager,
+    required this.matchedUser,
+    required this.onSendMessage,
+  });
+
+  void _goToChat(BuildContext context) {
+    // Create the match/conversation
+    chatManager.createMatch(matchedUser);
+    onSendMessage();
+
+    // Close the dialog
+    Navigator.pop(context);
+
+    // Navigate to main navigation screen
+    Navigator.pushNamedAndRemoveUntil(context, '/main-nav', (route) => false);
+
+    // After navigating, open the chat detail screen for this user
+    Future.delayed(const Duration(milliseconds: 100), () {
+      final chat = chatManager.getChatByUserName(matchedUser.name);
+      if (chat != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ChatDetailScreen(
+              chatUser: chat,
+            ),
           ),
-        ),
-        onPressed: onPressed,
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Color(0xFF8A4FFF),
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      backgroundColor: const Color(0xFF1D1B4E),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.pink.withOpacity(0.2),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.favorite,
+                color: Colors.pink,
+                size: 48,
+              ),
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "IT'S A MATCH!",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              userName,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              userMajor,
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "You and $userName have liked each other!",
+              style: const TextStyle(
+                color: Colors.white70,
+                fontSize: 14,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () => _goToChat(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF8A4FFF),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: const Text(
+                  "SEND A MESSAGE",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white70,
+                  side: const BorderSide(color: Colors.white30),
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: const Text(
+                  "KEEP SWIPING",
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

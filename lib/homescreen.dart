@@ -2,6 +2,7 @@ import 'package:campusmate/drawer.dart';
 import 'package:flutter/material.dart';
 import 'filter_screen.dart';
 import 'send_request_dialog.dart';
+import 'services/chat_manager.dart';
 
 class UserProfile {
   final String name;
@@ -102,12 +103,14 @@ class _HomeScreenState extends State<HomeScreen> {
   List<UserProfile> activeProfiles = [];
   List<UserProfile> historyProfiles = [];
   Set<String> sentRequests = {};
+  Set<String> likedProfiles = {};
 
   // Filtered active profiles based on search and filter
   List<UserProfile> getFilteredActiveProfiles() {
     List<UserProfile> filtered = List.from(activeProfiles);
 
-    // Apply search filter
+    filtered = filtered.where((profile) => !likedProfiles.contains(profile.name)).toList();
+
     if (_searchQuery.isNotEmpty) {
       filtered = filtered
           .where(
@@ -117,14 +120,12 @@ class _HomeScreenState extends State<HomeScreen> {
           .toList();
     }
 
-    // Apply course filter
     if (_currentFilter.course != null && _currentFilter.course!.isNotEmpty) {
       filtered = filtered
           .where((profile) => profile.major == _currentFilter.course)
           .toList();
     }
 
-    // Apply age filter
     if (_currentFilter.ageRange != null) {
       filtered = filtered.where((profile) {
         final age = profile.age;
@@ -177,27 +178,62 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _handleLike(UserProfile profile) {
+    final chatManager = ChatManager(); // Gets the singleton instance
+
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => SendRequestDialog(
+      builder: (context) => SendInterestDialog(
         userName: profile.name,
         userMajor: profile.major,
-        onRequestSent: () {
+        onSendRequest: () {
+          Navigator.pop(context);
+
           setState(() {
+            likedProfiles.add(profile.name);
             sentRequests.add(profile.name);
+            activeProfiles.remove(profile);
           });
+
+          bool isMatch = true;
+
+          if (isMatch) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => MatchDialog(
+                userName: profile.name,
+                userMajor: profile.major,
+                chatManager: chatManager,
+                matchedUser: profile,
+                onSendMessage: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('It\'s a match! Check your messages.'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Color(0xFF8A4FFF),
+                    ),
+                  );
+                },
+              ),
+            );
+          } else {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => RequestSentDialog(
+                userName: profile.name,
+                userMajor: profile.major,
+                onKeepSwiping: () {
+                  Navigator.pop(context);
+                },
+              ),
+            );
+          }
         },
-        onMatch: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('It\'s a match! Check your messages.'),
-              duration: Duration(seconds: 2),
-              backgroundColor: Color(0xFF8A4FFF),
-            ),
-          );
+        onCancel: () {
+          Navigator.pop(context);
         },
-        onDialogClose: () {},
       ),
     );
   }
@@ -213,6 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     activeProfiles = List.from(_allProfiles);
     historyProfiles = [];
+    likedProfiles = {};
     _searchController.addListener(() {
       setState(() {
         _searchQuery = _searchController.text;
@@ -267,7 +304,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Search Bar with Filter Icon
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
               child: Row(
@@ -320,7 +356,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // Navigation Sliding Toggle Button Filter Tab
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Container(
@@ -379,13 +414,24 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // Roommate Profiles List
             Expanded(
               child: currentList.isEmpty
                   ? const Center(
-                child: Text(
-                  "No profiles found",
-                  style: TextStyle(color: Colors.white38),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.people_outline, size: 80, color: Colors.white38),
+                    SizedBox(height: 16),
+                    Text(
+                      "No more profiles",
+                      style: TextStyle(color: Colors.white38),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      "Check back later for new matches!",
+                      style: TextStyle(color: Colors.white24),
+                    ),
+                  ],
                 ),
               )
                   : ListView.builder(
@@ -487,11 +533,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           right: 15,
                           child: GestureDetector(
                             onTap: () => _handleLike(user),
-                            child: CircleAvatar(
+                            child: const CircleAvatar(
                               radius: 18,
-                              backgroundColor: requestSent ? Colors.grey : Colors.pink,
+                              backgroundColor: Colors.pink,
                               child: Icon(
-                                requestSent ? Icons.check : Icons.favorite,
+                                Icons.favorite,
                                 color: Colors.white,
                                 size: 18,
                               ),

@@ -210,7 +210,7 @@ class _DrawerBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = [
       _MenuItem(icon: Icons.person_outline, label: 'Personal information'),
-      _MenuItem(icon: Icons.help_outline, label: 'Help center'),
+      _MenuItem(icon: Icons.help_outline, label: 'Help Center'),
       _MenuItem(icon: Icons.chat_bubble_outline, label: 'F.A.Q'),
       _MenuItem(icon: Icons.settings_outlined, label: 'Settings'),
     ];

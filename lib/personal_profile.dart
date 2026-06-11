@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 class PersonalProfileScreen extends StatefulWidget {
   const PersonalProfileScreen({Key? key}) : super(key: key);
@@ -92,8 +94,8 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                     decoration: BoxDecoration(
                       color: const Color(0xFF1E1E1E),
                       borderRadius: BorderRadius.circular(32),
-                      image: const DecorationImage(
-                        image: AssetImage('assets/avatar.png'), // Replace with your image
+                      image:  DecorationImage(
+                        image: AssetImage ('images/profilepersonjpeg-removebg-preview.png'), // Replace with your image
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -120,7 +122,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 image: const DecorationImage(
-                  image: AssetImage('assets/banner.png'), // Replace with your image
+                  image: AssetImage('images/backdrawer.jpeg'), // Replace with your image
                   fit: BoxFit.cover,
                 ),
               ),
@@ -142,7 +144,7 @@ class _PersonalProfileScreenState extends State<PersonalProfileScreen> {
                       child: const CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.white,
-                        backgroundImage: AssetImage('assets/avatar.png'), // Replace with your image
+                        backgroundImage: AssetImage('images/profilepersonjpeg-removebg-preview.png'), // Replace with your image
                       ),
                     ),
                     // Edit Icon
